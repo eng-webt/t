@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENG Dashboard</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/monitor--v1.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --b: #f8fafc; --c: #ffffff; --a: #0284c7; --t1: #1e293b; --t2: #64748b; --s: #10b981; --d: #ef4444; --bo: #e2e8f0; --g: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--b); color: var(--t1); margin: 0; padding: 0; line-height: 1.6; }
+        ._x1 { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--g); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        ._x2 { background: var(--c); padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        ._x3 { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--bo); border-radius: 8px; box-sizing: border-box; outline: none; }
+        ._x4 { width: 100%; padding: 12px; background: var(--a); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        ._x4:hover { opacity: 0.9; }
+        ._x5 { display: none; padding: 15px 15px 80px 15px; }
+        ._x6 { max-width: 1000px; margin: auto; }
+        ._x7 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        ._x8 { background: var(--c); padding: 10px 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        ._x9 { margin-bottom: 20px; background: var(--c); padding: 15px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        ._x10 { display: flex; flex-wrap: wrap; gap: 8px; }
+        ._x11 { background: var(--g); border: 1px solid var(--bo); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; color: var(--t1); }
+        ._x11:hover { background: var(--a); color: white; border-color: var(--a); transform: translateY(-2px); }
+        ._x11 span { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+        ._x12 { background: var(--c); border-radius: 12px; overflow: hidden; border: 1px solid var(--bo); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; color: var(--t2); padding: 14px 15px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--bo); }
+        td { padding: 14px 15px; border-bottom: 1px solid var(--bo); }
+        ._x13 { background: var(--g); font-weight: 800; color: #475569; font-size: 13px; text-transform: uppercase; scroll-margin-top: 20px; }
+        ._x13 td { border-left: 5px solid var(--a); padding: 12px 15px; }
+        ._x14 { float: right; background: var(--a); color: white; padding: 2px 10px; border-radius: 6px; font-size: 11px; }
+        ._x15 { font-weight: 600; font-size: 15px; color: var(--t1); }
+        ._x16 { display: flex; flex-wrap: wrap; gap: 8px; }
+        ._x17 { background: #ffffff; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--bo); font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        ._x17 b { color: var(--a); margin-left: 4px; font-family: 'Times New Roman', serif; font-size: 18px; }
+        .st { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .on { background: #d1fae5; color: var(--s); }
+        .off { background: #fee2e2; color: var(--d); }
+        .lo-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+        .lo-btn:hover { background: var(--d); transform: scale(1.05); }
+        @media (max-width: 600px) {
+            ._x7 { flex-direction: column; text-align: center; }
+            thead { display: none; }
+            tr { display: block; border-bottom: 10px solid var(--b); }
+            td { display: block; text-align: center; border-bottom: 1px solid #f1f5f9; padding: 15px; }
+            td::before { content: attr(data-label); font-weight: 700; display: block; font-size: 11px; color: var(--t2); text-transform: uppercase; margin-bottom: 8px; }
+            ._x16 { justify-content: center; }
+            .lo-btn { bottom: 15px; left: 15px; padding: 8px 14px; }
+        }
+    </style>
+</head>
+<body>
+<div id="l_scr" class="_x1">
+    <div class="_x2">
+        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" width="80" style="margin-bottom:10px">
+        <h2 style="color:var(--a)">Hệ Thống ENG</h2>
+        <div id="l_err" style="color:var(--d); font-size:13px; margin-bottom:15px; display:none;">Sai tài khoản hoặc mật khẩu!</div>
+        <input type="text" id="u_in" class="_x3" placeholder="Tên đăng nhập">
+        <input type="password" id="p_in" class="_x3" placeholder="Mật khẩu">
+        <button onclick="f_lg()" class="_x4">ĐĂNG NHẬP</button>
+    </div>
+</div>
+<div id="d_scr" class="_x5">
+    <button class="lo-btn" onclick="f_out()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Logout
+    </button>
+    <div class="_x6">
+        <div class="_x7">
+            <div>
+                <h2 style="margin:0; font-size:24px; color:var(--a); font-weight:800;">ENG Smart Monitor</h2>
+                <div id="m_stt" class="st off">Đang kết nối...</div>
+            </div>
+            <div class="_x8">
+                <span style="font-size:13px; color:var(--t2)">Tổng thiết bị:</span>
+                <span id="m_cnt" style="font-weight:800; color:var(--a); font-size:22px; margin-left:5px;">0</span>
+            </div>
+        </div>
+        <div class="_x9" id="n_sec" style="display:none;">
+            <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:12px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
+            <div class="_x10" id="n_btn"></div>
+        </div>
+        <div class="_x12">
+            <table>
+                <thead><tr><th style="width:35%">Thiết Bị</th><th>Thông Số Hoạt Động</th></tr></thead>
+                <tbody id="t_body">
+                    <tr id="w_row"><td colspan="2" style="text-align:center; padding:60px; color:var(--t2);">Đang quét tín hiệu...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    (function(){
+        const _r = [
+            "29410c", "e6be", "884b", "f2b7", "bb5f", "8d8c", "b5b3cb", 
+            "azz", "8hs", "09", 
+            "nG4", "HauW", "@", "bVn", "MeSR", 
+            ".s1.eu.", "hivemq.cloud", "datasend" 
+        ];
+        const _g = (...i) => i.map(x => _r[x]).join('');
+        window._cfg = { 
+            h: _g(0, 1, 2, 3, 4, 5, 6) + _g(15, 16), 
+            p: 8884, 
+            u: _g(7, 8, 9), 
+            pw: _g(10, 11, 12, 13, 14), 
+            t: _r[17], 
+            id: 'W_'+Math.random().toString(16).substr(2,8) 
+        };
+    })();
+    function _check(s) { return s.split('').map(c => c.charCodeAt(0)).join('-'); }
+    let _db = {}; let _cl;
+    function f_lg() {
+        const u = document.getElementById('u_in').value;
+        const p = document.getElementById('p_in').value;
+        if (_check(u) === '97-100-109-105-110' && _check(p) === '116-97-109') {
+            localStorage.setItem('_auth', 'true');
+            f_show();
+        } else { document.getElementById('l_err').style.display = 'block'; }
+    }
+    function f_show() {
+        document.getElementById('l_scr').style.display = 'none';
+        document.getElementById('d_scr').style.display = 'block';
+        f_start();
+    }
+    function f_out() {
+        localStorage.removeItem('_auth');
+        location.reload();
+    }
+    window.onload = () => { if(localStorage.getItem('_auth') === 'true') f_show(); };
+    document.addEventListener('keypress', (e) => { if (e.key === 'Enter') f_lg(); });
+    function f_start() {
+        _cl = new Paho.MQTT.Client(_cfg.h, _cfg.p, _cfg.id);
+        _cl.onMessageArrived = (m) => {
+            try {
+                const d = JSON.parse(m.payloadString);
+                Object.assign(_db, d);
+                f_ui();
+            } catch(e) {}
+        };
+        const opt = {
+            useSSL: true, userName: _cfg.u, password: _cfg.pw,
+            onSuccess: () => {
+                const l = document.getElementById('m_stt');
+                l.innerText = "Hệ thống trực tuyến"; l.className = "st on";
+                _cl.subscribe(_cfg.t);
+                f_sync();
+            },
+            onFailure: (e) => { 
+                console.log(e);
+                document.getElementById('m_stt').innerText = "Lỗi kết nối"; 
+            }
+        };
+        _cl.connect(opt);
+        setInterval(f_sync, 300000);
+    }
+    function f_ui() {
+        const b = document.getElementById('t_body');
+        const w = document.getElementById('w_row');
+        if (w) w.remove();
+        const ks = Object.keys(_db).sort((a, b) => a.localeCompare(b));
+        document.getElementById('m_cnt').innerText = ks.length;
+        const gC = {}; const gO = [];
+        ks.forEach(k => {
+            const g = (k.split(/[ /_-]/)[0]).toUpperCase();
+            if (!gC[g]) { gC[g] = 0; gO.push(g); }
+            gC[g]++;
+        });
+        if (gO.length > 0) {
+            document.getElementById('n_sec').style.display = 'block';
+            document.getElementById('n_btn').innerHTML = gO.map(g => 
+                `<button class="_x11" onclick="document.getElementById('g_${g}').scrollIntoView({behavior:'smooth'})">${g} <span>${gC[g]}</span></button>`
+            ).join('');
+        }
+        let h = ''; let lG = '';
+        ks.forEach(k => {
+            const cG = (k.split(/[ /_-]/)[0]).toUpperCase();
+            if (cG !== lG) {
+                h += `<tr class="_x13" id="g_${cG}"><td colspan="2">KHU VỰC: ${cG}<span class="_x14">${gC[cG]} Thiết bị</span></td></tr>`;
+                lG = cG;
+            }
+            const vd = _db[k];
+            let bd = '';
+            if (typeof vd === 'object') {
+                for (let x in vd) bd += `<div class="_x17">${x}: <b>${vd[x]}</b></div>`;
+            } else bd = `<div class="_x17">Dữ liệu: <b>${vd}</b></div>`;
+            h += `<tr><td data-label="Thiết Bị" class="_x15">${k}</td><td data-label="Thông Số"><div class="_x16">${bd}</div></td></tr>`;
+        });
+        b.innerHTML = h;
+    }
+    function f_sync() {
+        if (_cl && _cl.isConnected()) {
+            const m = new Paho.MQTT.Message(new Date().toLocaleString('vi-VN'));
+            m.destinationName = "dataread"; 
+            m.qos = 1;
+            _cl.send(m);
+        }
+    }
+</script>
+</body>
+</html>
