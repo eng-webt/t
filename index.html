@@ -6,6 +6,7 @@
     <title>ENG Dashboard</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/monitor--v1.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --b: #f8fafc; --c: #ffffff; --a: #0284c7; --t1: #1e293b; --t2: #64748b; --s: #10b981; --d: #ef4444; --bo: #e2e8f0; --g: #f1f5f9; }
@@ -38,26 +39,11 @@
         .st { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
         .on { background: #d1fae5; color: var(--s); }
         .off { background: #fee2e2; color: var(--d); }
-        .lo-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1000;
-            transition: all 0.2s;
-        }
-        .lo-btn:hover { background: var(--d); transform: scale(1.05); }
+        .lo-btn { position: fixed; bottom: 20px; left: 20px; background: #334155; color: white; border: none; padding: 10px 18px; border-radius: 30px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; transition: all 0.2s; }
+        .g_grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+        .g_card { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--bo); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .g_title { grid-column: 1 / -1; color: var(--a); font-weight: 800; font-size: 14px; border-left: 4px solid var(--a); padding-left: 10px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn_g { background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3); }
         @media (max-width: 600px) {
             ._x7 { flex-direction: column; text-align: center; }
             thead { display: none; }
@@ -65,11 +51,11 @@
             td { display: block; text-align: center; border-bottom: 1px solid #f1f5f9; padding: 15px; }
             td::before { content: attr(data-label); font-weight: 700; display: block; font-size: 11px; color: var(--t2); text-transform: uppercase; margin-bottom: 8px; }
             ._x16 { justify-content: center; }
-            .lo-btn { bottom: 15px; left: 15px; padding: 8px 14px; }
         }
     </style>
 </head>
 <body>
+
 <div id="l_scr" class="_x1">
     <div class="_x2">
         <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" width="80" style="margin-bottom:10px">
@@ -77,11 +63,12 @@
         <div id="l_err" style="color:var(--d); font-size:13px; margin-bottom:15px; display:none;">Sai tài khoản hoặc mật khẩu!</div>
         <input type="text" id="u_in" class="_x3" placeholder="Tên đăng nhập">
         <input type="password" id="p_in" class="_x3" placeholder="Mật khẩu">
-        <button onclick="f_lg()" class="_x4">ĐĂNG NHẬP</button>
+        <button onclick="_z1()" class="_x4">ĐĂNG NHẬP</button>
     </div>
 </div>
+
 <div id="d_scr" class="_x5">
-    <button class="lo-btn" onclick="f_out()">
+    <button class="lo-btn" onclick="_z3()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
         Logout
     </button>
@@ -90,95 +77,103 @@
             <div>
                 <h2 style="margin:0; font-size:24px; color:var(--a); font-weight:800;">ENG Smart Monitor</h2>
                 <div id="m_stt" class="st off">Đang kết nối...</div>
+                <br><button onclick="_z7()" class="btn_g" id="btn_tg">ACM GAUGE</button>
             </div>
             <div class="_x8">
                 <span style="font-size:13px; color:var(--t2)">Tổng thiết bị:</span>
                 <span id="m_cnt" style="font-weight:800; color:var(--a); font-size:22px; margin-left:5px;">0</span>
             </div>
         </div>
-        <div class="_x9" id="n_sec" style="display:none;">
-            <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:12px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
-            <div class="_x10" id="n_btn"></div>
-        </div>
-        <div class="_x12">
-            <table>
-                <thead><tr><th style="width:35%">Thiết Bị</th><th>Thông Số Hoạt Động</th></tr></thead>
-                <tbody id="t_body">
-                    <tr id="w_row"><td colspan="2" style="text-align:center; padding:60px; color:var(--t2);">Đang quét tín hiệu...</td></tr>
-                </tbody>
-            </table>
+        <div id="gauge_v" style="display:none;" class="g_grid"></div>
+        <div id="table_v">
+            <div class="_x9" id="n_sec" style="display:none;">
+                <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:12px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
+                <div class="_x10" id="n_btn"></div>
+            </div>
+            <div class="_x12">
+                <table>
+                    <thead><tr><th style="width:35%">Thiết Bị</th><th>Thông Số Hoạt Động</th></tr></thead>
+                    <tbody id="t_body">
+                        <tr id="w_row"><td colspan="2" style="text-align:center; padding:60px; color:var(--t2);">Đang quét tín hiệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
+    google.charts.load('current', {'packages':['gauge']});
+    let _q1 = false;
+    let _q2 = {};
+    let _q3;
+    let _q4 = {}; 
+    let _q5 = null;
+
     (function(){
-        const _r = [
-            "29410c", "e6be", "884b", "f2b7", "bb5f", "8d8c", "b5b3cb", 
-            "azz", "8hs", "09", 
-            "nG4", "HauW", "@", "bVn", "MeSR", 
-            ".s1.eu.", "hivemq.cloud", "datasend" 
-        ];
+        const _r = ["29410c", "e6be", "884b", "f2b7", "bb5f", "8d8c", "b5b3cb", "azz", "8hs", "09", "nG4", "HauW", "@", "bVn", "MeSR", ".s1.eu.", "hivemq.cloud", "datasend"];
         const _g = (...i) => i.map(x => _r[x]).join('');
-        window._cfg = { 
-            h: _g(0, 1, 2, 3, 4, 5, 6) + _g(15, 16), 
-            p: 8884, 
-            u: _g(7, 8, 9), 
-            pw: _g(10, 11, 12, 13, 14), 
-            t: _r[17], 
-            id: 'W_'+Math.random().toString(16).substr(2,8) 
-        };
+        window._v9 = { h: _g(0, 1, 2, 3, 4, 5, 6) + _g(15, 16), p: 8884, u: _g(7, 8, 9), pw: _g(10, 11, 12, 13, 14), t: _r[17], id: 'W_'+Math.random().toString(16).substr(2,8) };
     })();
-    function _check(s) { return s.split('').map(c => c.charCodeAt(0)).join('-'); }
-    let _db = {}; let _cl;
-    function f_lg() {
+
+    function _z1() {
         const u = document.getElementById('u_in').value;
         const p = document.getElementById('p_in').value;
-        if (_check(u) === '97-100-109-105-110' && _check(p) === '116-97-109') {
-            localStorage.setItem('_auth', 'true');
-            f_show();
-        } else { document.getElementById('l_err').style.display = 'block'; }
+        if (btoa(u) === 'YWRtaW4=' && btoa(p) === 'dGFt') {
+            localStorage.setItem('_auth', btoa('valid_user')); 
+            _z2();
+        } else { 
+            document.getElementById('l_err').style.display = 'block'; 
+        }
     }
-    function f_show() {
+
+    function _z2() {
         document.getElementById('l_scr').style.display = 'none';
         document.getElementById('d_scr').style.display = 'block';
-        f_start();
+        _z4();
     }
-    function f_out() {
-        localStorage.removeItem('_auth');
-        location.reload();
-    }
-    window.onload = () => { if(localStorage.getItem('_auth') === 'true') f_show(); };
-    document.addEventListener('keypress', (e) => { if (e.key === 'Enter') f_lg(); });
-    function f_start() {
-        _cl = new Paho.MQTT.Client(_cfg.h, _cfg.p, _cfg.id);
-        _cl.onMessageArrived = (m) => {
+
+    function _z3() { localStorage.removeItem('_auth'); location.reload(); }
+    window.onload = () => { if(localStorage.getItem('_auth')) _z2(); };
+    document.addEventListener('keypress', (e) => { if (e.key === 'Enter') _z1(); });
+
+    function _z4() {
+        if (_q3) { try { _q3.disconnect(); } catch(e){} }
+        _q3 = new Paho.MQTT.Client(_v9.h, _v9.p, _v9.id);
+        _q3.onConnectionLost = (res) => {
+            const l = document.getElementById('m_stt');
+            l.innerText = "Mất kết nối! Đang thử lại...";
+            l.className = "st off";
+            if (res.errorCode !== 0) setTimeout(_z4, 5000);
+        };
+        _q3.onMessageArrived = (m) => {
             try {
                 const d = JSON.parse(m.payloadString);
-                Object.assign(_db, d);
-                f_ui();
+                Object.assign(_q2, d);
+                if (!_q5) {
+                    _q5 = setTimeout(() => {
+                        _z5();
+                        if(_q1) _z8();
+                        _q5 = null;
+                    }, 800);
+                }
             } catch(e) {}
         };
-        const opt = {
-            useSSL: true, userName: _cfg.u, password: _cfg.pw,
+        _q3.connect({
+            useSSL: true, userName: _v9.u, password: _v9.pw,
             onSuccess: () => {
                 const l = document.getElementById('m_stt');
                 l.innerText = "Hệ thống trực tuyến"; l.className = "st on";
-                _cl.subscribe(_cfg.t);
-                f_sync();
+                _q3.subscribe(_v9.t);
+                _z9();
             },
-            onFailure: (e) => { 
-                console.log(e);
-                document.getElementById('m_stt').innerText = "Lỗi kết nối"; 
-            }
-        };
-        _cl.connect(opt);
-        setInterval(f_sync, 300000);
+            onFailure: () => setTimeout(_z4, 5000)
+        });
     }
-    function f_ui() {
+
+    function _z5() {
         const b = document.getElementById('t_body');
-        const w = document.getElementById('w_row');
-        if (w) w.remove();
-        const ks = Object.keys(_db).sort((a, b) => a.localeCompare(b));
+        const ks = Object.keys(_q2).sort();
         document.getElementById('m_cnt').innerText = ks.length;
         const gC = {}; const gO = [];
         ks.forEach(k => {
@@ -199,7 +194,7 @@
                 h += `<tr class="_x13" id="g_${cG}"><td colspan="2">KHU VỰC: ${cG}<span class="_x14">${gC[cG]} Thiết bị</span></td></tr>`;
                 lG = cG;
             }
-            const vd = _db[k];
+            const vd = _q2[k];
             let bd = '';
             if (typeof vd === 'object') {
                 for (let x in vd) bd += `<div class="_x17">${x}: <b>${vd[x]}</b></div>`;
@@ -208,14 +203,80 @@
         });
         b.innerHTML = h;
     }
-    function f_sync() {
-        if (_cl && _cl.isConnected()) {
-            const m = new Paho.MQTT.Message(new Date().toLocaleString('vi-VN'));
-            m.destinationName = "dataread"; 
-            m.qos = 1;
-            _cl.send(m);
+
+    function _z7() {
+        _q1 = !_q1;
+        document.getElementById('table_v').style.display = _q1 ? 'none' : 'block';
+        document.getElementById('gauge_v').style.display = _q1 ? 'grid' : 'none';
+        document.getElementById('btn_tg').innerText = _q1 ? 'XEM DẠNG BẢNG' : 'ACM GAUGE';
+        if(_q1) {
+            document.getElementById('gauge_v').innerHTML = "";
+            _q4 = {};
+            _z8();
         }
     }
+
+    const _v0 = [
+        { t: '1. Công suất Máy Nén Khí MA (kW)', u: 'kW', l: [
+            { id: 'ACM_MA_1', k: 'kw', n: 'ACM MA 1', m: 90 }, { id: 'ACM_MA_2', k: 'kw', n: 'ACM MA 2', m: 90 },
+            { id: 'ACM_MA_3', k: 'kw', n: 'ACM MA 3', m: 90 }, { id: 'ACM_MA_4', k: 'kw', n: 'ACM MA 4', m: 90 },
+            { id: 'ACM_MA_5', k: 'kw', n: 'ACM MA 5', m: 90 }, { id: 'ACM_MA_6', k: 'kw', n: 'ACM MA 6', m: 90 }
+        ]},
+        { t: '2. Lưu lượng Hệ thống MA (Nm³/h)', u: 'Nm³/h', l: [
+            { id: 'FLOW_MA', k: 'luuluong', n: 'FLOW MA AIR', m: 4000 }, { id: 'EX_NANG_LUONG', k: 'air_flow', n: 'FLOW EX AIR', m: 2000 },
+            { id: 'CA/ENE', k: 'giatri', n: 'FLOW CA AIR', m: 2000 }, { id: 'DP/ENE', k: 'giatri', n: 'FLOW DP AIR', m: 1000 },
+            { id: 'CO_NANG_LUONG', k: 'air_flow', n: 'FLOW CO AIR', m: 1000 }, { id: 'ST_NANG_LUONG', k: 'air_flow', n: 'FLOW ST AIR', m: 1000 }
+        ]},
+        { t: '3. Lưu lượng Khu vực FAB (Nm³/h)', u: 'Nm³/h', l: [
+            { id: 'AFAB1', k: 'flow', n: 'FLOW FAB 1 AIR', m: 1500 }, { id: 'AFAB2', k: 'flow', n: 'FLOW FAB 2 AIR', m: 1500 }
+        ]},
+        { t: '4. Công suất Máy Nén Khí FAB (kW)', u: 'kW', l: [
+            { id: 'ACMFAB1/1', k: 'kw', n: 'ACMFAB 1.1', m: 100 }, { id: 'ACMFAB1/2', k: 'kw', n: 'ACMFAB 1.2', m: 100 },
+            { id: 'ACMFAB1/3', k: 'kw', n: 'ACMFAB 1.3', m: 100 }, { id: 'ACMFAB2/1', k: 'kw', n: 'ACMFAB 2.1', m: 100 },
+            { id: 'ACMFAB2/2', k: 'kw', n: 'ACMFAB 2.2', m: 100 }, { id: 'ACMFAB2/3', k: 'kw', n: 'ACMFAB 2.3', m: 100 }
+        ]}
+    ];
+
+    function _z8() {
+        const box = document.getElementById('gauge_v');
+        if(box.innerHTML === "") {
+            _q4 = {};
+            let html = '';
+            _v0.forEach(s => {
+                html += `<div class="g_title">${s.t}</div>`;
+                s.l.forEach(t => {
+                    const i = t.id.replace(/\//g,'_');
+                    html += `<div class="g_card"><div id="c_${i}"></div><div style="font-weight:700; color:var(--a); font-size:12px; margin-top:5px;">${t.n}</div></div>`;
+                });
+            });
+            box.innerHTML = html;
+        }
+        if (typeof google === 'undefined' || !google.visualization || !google.visualization.Gauge) return;
+        _v0.forEach(s => {
+            s.l.forEach(t => {
+                const i = t.id.replace(/\//g,'_');
+                const el = document.getElementById(`c_${i}`);
+                if (!el) return;
+                let rv = (_q2[t.id] && _q2[t.id][t.k] !== undefined) ? parseFloat(_q2[t.id][t.k]) : 0; 
+                if (t.id === 'AFAB1' || t.id === 'AFAB2') rv /= 10;
+                let v = Math.round(rv) || 0;
+                let dt = google.visualization.arrayToDataTable([['Label', 'Value'], [s.u, v]]);
+                let op = { width: 155, height: 155, redFrom: t.m * 0.85, redTo: t.m, yellowFrom: t.m * 0.7, yellowTo: t.m * 0.85, minorTicks: 5, max: t.m };
+                try {
+                    if (!_q4[i]) _q4[i] = new google.visualization.Gauge(el);
+                    _q4[i].draw(dt, op);
+                } catch(e) {}
+            });
+        });
+    }
+
+    function _z9() {
+        if (_q3 && _q3.isConnected()) {
+            const m = new Paho.MQTT.Message(new Date().toLocaleString('vi-VN'));
+            m.destinationName = "dataread"; m.qos = 1; _q3.send(m);
+        }
+    }
+    setInterval(_z9, 300000);
 </script>
 </body>
 </html>
