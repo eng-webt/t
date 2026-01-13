@@ -150,6 +150,7 @@
         };
         _0x99b.onMessageArrived = (_0xma) => {
             try {
+                if (!_0xma.payloadString || _0xma.payloadString.trim() === "") return;
                 const _0xd1 = JSON.parse(_0xma.payloadString);
                 for (let _0xk1 in _0xd1) {
                     if (typeof _0xd1[_0xk1] === 'object' && _0xd1[_0xk1] !== null) {
@@ -158,15 +159,10 @@
                         _0xd3c[_0xk1] = _0xd1[_0xk1];
                     }
                 }
-                if (!_0x8d4) {
-                    _0x8d4 = setTimeout(() => {
-                        _0x2233();
-                        if(_0xfe1) _0x7a8b();
-                        if(_0xae2) _0x4c5d();
-                        _0x8d4 = null;
-                    }, 800);
-                }
-            } catch(_0xee) {}
+                _0x2233();
+                if(_0xfe1) _0x7a8b();
+                if(_0xae2) _0x4c5d();
+            } catch(_0xee) { console.error(_0xee); }
         };
         _0x99b.connect({
             useSSL: true, userName: _v9.u, password: _v9.pw,
@@ -332,7 +328,7 @@
             const _0xi8 = new Paho.MQTT.Message(new Date().toLocaleString());
             _0xi8.destinationName = "dataread"; _0x99b.send(_0xi8);
         }
-    }, 300000);
+    }, 60000);
 </script>
 </body>
 </html>
