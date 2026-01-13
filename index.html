@@ -17,14 +17,13 @@
         ._x4 { width: 100%; padding: 12px; background: var(--a); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
         ._x4:hover { opacity: 0.9; }
         ._x5 { display: none; padding: 15px 15px 80px 15px; }
-        ._x6 { max-width: 1000px; margin: auto; }
+        ._x6 { max-width: 1200px; margin: auto; }
         ._x7 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         ._x8 { background: var(--c); padding: 10px 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         ._x9 { margin-bottom: 20px; background: var(--c); padding: 15px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         ._x10 { display: flex; flex-wrap: wrap; gap: 8px; }
-        ._x11 { background: var(--g); border: 1px solid var(--bo); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; color: var(--t1); }
+        ._x11 { background: var(--g); border: 1px solid var(--bo); padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex;line-height: 1;margin: 0; align-items: center; gap: 6px; color: var(--t2);text-transform: uppercase; }
         ._x11:hover { background: var(--a); color: white; border-color: var(--a); transform: translateY(-2px); }
-        ._x11 span { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
         ._x12 { background: var(--c); border-radius: 12px; overflow: hidden; border: 1px solid var(--bo); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8fafc; color: var(--t2); padding: 14px 15px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--bo); }
@@ -39,23 +38,26 @@
         .st { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
         .on { background: #d1fae5; color: var(--s); }
         .off { background: #fee2e2; color: var(--d); }
-        .lo-btn { position: fixed; bottom: 20px; left: 20px; background: #334155; color: white; border: none; padding: 10px 18px; border-radius: 30px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; transition: all 0.2s; }
-        .g_grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
-        .g_card { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--bo); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .g_title { grid-column: 1 / -1; color: var(--a); font-weight: 800; font-size: 14px; border-left: 4px solid var(--a); padding-left: 10px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn_g { background: #6366f1; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3); }
+        .lo-btn { position: fixed; bottom: 20px; left: 20px; background: #334155; color: white; border: none; padding: 10px 18px; border-radius: 30px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; z-index: 1000; }
+        #p_nav { margin: 15px 0; padding: 12px; background: #fff; border-radius: 10px; border: 1px solid var(--bo); display: none; }
+        .p_tab { background: #f1f5f9; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--t2); text-transform: uppercase; transition: 0.2s; }
+        .p_tab:hover { background: var(--a); color: white; }
+        .g_grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
+        .g_card { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--bo); text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
+        .g_title { grid-column: 1 / -1; color: var(--a); font-weight: 800; font-size: 14px; border-left: 5px solid var(--a); padding: 10px; margin: 20px 0 10px 0; text-transform: uppercase; background: #f1f5f9; width: 100%; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; scroll-margin-top: 20px; }
+        .g_count { background: var(--a); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+        .btn_g { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 12px; }
+        .btn_g:hover { opacity: 0.8; transform: translateY(-1px); }
         @media (max-width: 600px) {
             ._x7 { flex-direction: column; text-align: center; }
             thead { display: none; }
             tr { display: block; border-bottom: 10px solid var(--b); }
             td { display: block; text-align: center; border-bottom: 1px solid #f1f5f9; padding: 15px; }
             td::before { content: attr(data-label); font-weight: 700; display: block; font-size: 11px; color: var(--t2); text-transform: uppercase; margin-bottom: 8px; }
-            ._x16 { justify-content: center; }
         }
     </style>
 </head>
 <body>
-
 <div id="l_scr" class="_x1">
     <div class="_x2">
         <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" width="80" style="margin-bottom:10px">
@@ -63,31 +65,35 @@
         <div id="l_err" style="color:var(--d); font-size:13px; margin-bottom:15px; display:none;">Sai tài khoản hoặc mật khẩu!</div>
         <input type="text" id="u_in" class="_x3" placeholder="Tên đăng nhập">
         <input type="password" id="p_in" class="_x3" placeholder="Mật khẩu">
-        <button onclick="_z1()" class="_x4">ĐĂNG NHẬP</button>
+        <button onclick="_0x4a1b()" class="_x4">ĐĂNG NHẬP</button>
     </div>
 </div>
-
 <div id="d_scr" class="_x5">
-    <button class="lo-btn" onclick="_z3()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-        Logout
-    </button>
+    <button class="lo-btn" onclick="_0x9ef2()">Logout</button>
     <div class="_x6">
         <div class="_x7">
             <div>
                 <h2 style="margin:0; font-size:24px; color:var(--a); font-weight:800;">ENG Smart Monitor</h2>
                 <div id="m_stt" class="st off">Đang kết nối...</div>
-                <br><button onclick="_z7()" class="btn_g" id="btn_tg">ACM GAUGE</button>
+                <div style="margin-top:12px; display:flex; gap:8px;">
+                    <button onclick="_0x7c22()" class="btn_g" id="btn_tg">ACM GAUGE</button>
+                    <button onclick="_0xbb41()" class="btn_g" id="btn_pg" style="background:#10b981;">POWER GAUGE (kW)</button>
+                </div>
             </div>
             <div class="_x8">
                 <span style="font-size:13px; color:var(--t2)">Tổng thiết bị:</span>
                 <span id="m_cnt" style="font-weight:800; color:var(--a); font-size:22px; margin-left:5px;">0</span>
             </div>
         </div>
+        <div id="p_nav">
+            <div style="font-size: 10px; font-weight: 800; color: var(--t2); margin-bottom: 8px; text-transform: uppercase;">Truy cập nhanh:</div>
+            <div id="p_tabs" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        </div>
         <div id="gauge_v" style="display:none;" class="g_grid"></div>
+        <div id="power_gauge_v" style="display:none;" class="g_grid"></div>
         <div id="table_v">
             <div class="_x9" id="n_sec" style="display:none;">
-                <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:12px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
+                <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:11px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
                 <div class="_x10" id="n_btn"></div>
             </div>
             <div class="_x12">
@@ -101,122 +107,126 @@
         </div>
     </div>
 </div>
-
 <script>
+    window.addEventListener('resize', () => {
+        if(_0xfe1) _0x7a8b();
+        if(_0xae2) _0x4c5d();
+    });
     google.charts.load('current', {'packages':['gauge']});
-    let _q1 = false;
-    let _q2 = {};
-    let _q3;
-    let _q4 = {}; 
-    let _q5 = null;
-
+    let _0xfe1 = false;
+    let _0xae2 = false;
+    let _0xd3c = {};
+    let _0x99b;
+    let _0x1a2 = {}; 
+    let _0x2c3 = {};
+    let _0x8d4 = null;
     (function(){
-        const _r = ["29410c", "e6be", "884b", "f2b7", "bb5f", "8d8c", "b5b3cb", "azz", "8hs", "09", "nG4", "HauW", "@", "bVn", "MeSR", ".s1.eu.", "hivemq.cloud", "datasend"];
-        const _g = (...i) => i.map(x => _r[x]).join('');
-        window._v9 = { h: _g(0, 1, 2, 3, 4, 5, 6) + _g(15, 16), p: 8884, u: _g(7, 8, 9), pw: _g(10, 11, 12, 13, 14), t: _r[17], id: 'W_'+Math.random().toString(16).substr(2,8) };
+        const _0xf = ["29410c", "e6be", "884b", "f2b7", "bb5f", "8d8c", "b5b3cb", "azz", "8hs", "09", "nG4", "HauW", "@", "bVn", "MeSR", ".s1.eu.", "hivemq.cloud", "datasend"];
+        const _0xe = (...i) => i.map(x => _0xf[x]).join('');
+        window._v9 = { h: _0xe(0, 1, 2, 3, 4, 5, 6) + _0xe(15, 16), p: 8884, u: _0xe(7, 8, 9), pw: _0xe(10, 11, 12, 13, 14), t: _0xf[17], id: 'W_'+Math.random().toString(16).substr(2,8) };
     })();
-
-    function _z1() {
-        const u = document.getElementById('u_in').value;
-        const p = document.getElementById('p_in').value;
-        if (btoa(u) === 'YWRtaW4=' && btoa(p) === 'dGFt') {
+    function _0x4a1b() {
+        const _0xa1 = document.getElementById('u_in').value;
+        const _0xa2 = document.getElementById('p_in').value;
+        if (btoa(_0xa1) === 'YWRtaW4=' && btoa(_0xa2) === 'dGFt') {
             localStorage.setItem('_auth', btoa('valid_user')); 
-            _z2();
-        } else { 
-            document.getElementById('l_err').style.display = 'block'; 
-        }
+            _0x5f32();
+        } else { document.getElementById('l_err').style.display = 'block'; }
     }
-
-    function _z2() {
+    function _0x5f32() {
         document.getElementById('l_scr').style.display = 'none';
         document.getElementById('d_scr').style.display = 'block';
-        _z4();
+        _0x1122();
     }
-
-    function _z3() { localStorage.removeItem('_auth'); location.reload(); }
-    window.onload = () => { if(localStorage.getItem('_auth')) _z2(); };
-    document.addEventListener('keypress', (e) => { if (e.key === 'Enter') _z1(); });
-
-    function _z4() {
-        if (_q3) { try { _q3.disconnect(); } catch(e){} }
-        _q3 = new Paho.MQTT.Client(_v9.h, _v9.p, _v9.id);
-        _q3.onConnectionLost = (res) => {
-            const l = document.getElementById('m_stt');
-            l.innerText = "Mất kết nối! Đang thử lại...";
-            l.className = "st off";
-            if (res.errorCode !== 0) setTimeout(_z4, 5000);
+    function _0x9ef2() { localStorage.removeItem('_auth'); location.reload(); }
+    window.onload = () => { if(localStorage.getItem('_auth')) _0x5f32(); };
+    function _0x1122() {
+        if (_0x99b) { try { _0x99b.disconnect(); } catch(_0xeb){} }
+        _0x99b = new Paho.MQTT.Client(_v9.h, _v9.p, _v9.id);
+        _0x99b.onConnectionLost = (_0xc1) => {
+            const _0xc2 = document.getElementById('m_stt');
+            _0xc2.innerText = "Mất kết nối!"; _0xc2.className = "st off";
+            if (_0xc1.errorCode !== 0) setTimeout(_0x1122, 5000);
         };
-        _q3.onMessageArrived = (m) => {
+        _0x99b.onMessageArrived = (_0xma) => {
             try {
-                const d = JSON.parse(m.payloadString);
-                Object.assign(_q2, d);
-                if (!_q5) {
-                    _q5 = setTimeout(() => {
-                        _z5();
-                        if(_q1) _z8();
-                        _q5 = null;
+                const _0xd1 = JSON.parse(_0xma.payloadString);
+                for (let _0xk1 in _0xd1) {
+                    if (typeof _0xd1[_0xk1] === 'object' && _0xd1[_0xk1] !== null) {
+                        _0xd3c[_0xk1] = { ..._0xd3c[_0xk1], ..._0xd1[_0xk1] };
+                    } else {
+                        _0xd3c[_0xk1] = _0xd1[_0xk1];
+                    }
+                }
+                if (!_0x8d4) {
+                    _0x8d4 = setTimeout(() => {
+                        _0x2233();
+                        if(_0xfe1) _0x7a8b();
+                        if(_0xae2) _0x4c5d();
+                        _0x8d4 = null;
                     }, 800);
                 }
-            } catch(e) {}
+            } catch(_0xee) {}
         };
-        _q3.connect({
+        _0x99b.connect({
             useSSL: true, userName: _v9.u, password: _v9.pw,
             onSuccess: () => {
-                const l = document.getElementById('m_stt');
-                l.innerText = "Hệ thống trực tuyến"; l.className = "st on";
-                _q3.subscribe(_v9.t);
-                _z9();
+                document.getElementById('m_stt').innerText = "Trực tuyến"; 
+                document.getElementById('m_stt').className = "st on";
+                _0x99b.subscribe(_v9.t);
+                const _0xm1 = new Paho.MQTT.Message(new Date().toLocaleString());
+                _0xm1.destinationName = "dataread"; 
+                _0x99b.send(_0xm1);
             },
-            onFailure: () => setTimeout(_z4, 5000)
+            onFailure: () => setTimeout(_0x1122, 5000)
         });
     }
-
-    function _z5() {
-        const b = document.getElementById('t_body');
-        const ks = Object.keys(_q2).sort();
-        document.getElementById('m_cnt').innerText = ks.length;
-        const gC = {}; const gO = [];
-        ks.forEach(k => {
-            const g = (k.split(/[ /_-]/)[0]).toUpperCase();
-            if (!gC[g]) { gC[g] = 0; gO.push(g); }
-            gC[g]++;
+    function _0x2233() {
+        const _0xb1 = document.getElementById('t_body');
+        const _0xb2 = Object.keys(_0xd3c).sort();
+        document.getElementById('m_cnt').innerText = _0xb2.length;
+        const _0xb3 = {}; const _0xb4 = [];
+        _0xb2.forEach(_0xb5 => {
+            const _0xb6 = (_0xb5.split(/[ /_-]/)[0]).toUpperCase();
+            if (!_0xb3[_0xb6]) { _0xb3[_0xb6] = 0; _0xb4.push(_0xb6); }
+            _0xb3[_0xb6]++;
         });
-        if (gO.length > 0) {
+        if (_0xb4.length > 0) {
             document.getElementById('n_sec').style.display = 'block';
-            document.getElementById('n_btn').innerHTML = gO.map(g => 
-                `<button class="_x11" onclick="document.getElementById('g_${g}').scrollIntoView({behavior:'smooth'})">${g} <span>${gC[g]}</span></button>`
+            document.getElementById('n_btn').innerHTML = _0xb4.map(_0xb7 => 
+                `<button class="_x11" onclick="document.getElementById('g_${_0xb7}').scrollIntoView({behavior:'smooth'})">${_0xb7} <span>(${_0xb3[_0xb7]})</span></button>`
             ).join('');
         }
-        let h = ''; let lG = '';
-        ks.forEach(k => {
-            const cG = (k.split(/[ /_-]/)[0]).toUpperCase();
-            if (cG !== lG) {
-                h += `<tr class="_x13" id="g_${cG}"><td colspan="2">KHU VỰC: ${cG}<span class="_x14">${gC[cG]} Thiết bị</span></td></tr>`;
-                lG = cG;
+        let _0xb8 = ''; let _0xb9 = '';
+        _0xb2.forEach(_0xba => {
+            const _0xbb = (_0xba.split(/[ /_-]/)[0]).toUpperCase();
+            if (_0xbb !== _0xb9) {
+                _0xb8 += `<tr class="_x13" id="g_${_0xbb}"><td colspan="2">KHU VỰC: ${_0xbb}<span class="_x14">${_0xb3[_0xbb]} Thiết bị</span></td></tr>`;
+                _0xb9 = _0xbb;
             }
-            const vd = _q2[k];
-            let bd = '';
-            if (typeof vd === 'object') {
-                for (let x in vd) bd += `<div class="_x17">${x}: <b>${vd[x]}</b></div>`;
-            } else bd = `<div class="_x17">Dữ liệu: <b>${vd}</b></div>`;
-            h += `<tr><td data-label="Thiết Bị" class="_x15">${k}</td><td data-label="Thông Số"><div class="_x16">${bd}</div></td></tr>`;
+            const _0xbc = _0xd3c[_0xba];
+            let _0xbd = '';
+            if (typeof _0xbc === 'object') {
+                for (let _0xbe in _0xbc) _0xbd += `<div class="_x17">${_0xbe}: <b>${_0xbc[_0xbe]}</b></div>`;
+            } else _0xbd = `<div class="_x17">Dữ liệu: <b>${_0xbc}</b></div>`;
+            _0xb8 += `<tr><td class="_x15">${_0xba}</td><td><div class="_x16">${_0xbd}</div></td></tr>`;
         });
-        b.innerHTML = h;
+        _0xb1.innerHTML = _0xb8;
     }
-
-    function _z7() {
-        _q1 = !_q1;
-        document.getElementById('table_v').style.display = _q1 ? 'none' : 'block';
-        document.getElementById('gauge_v').style.display = _q1 ? 'grid' : 'none';
-        document.getElementById('btn_tg').innerText = _q1 ? 'XEM DẠNG BẢNG' : 'ACM GAUGE';
-        if(_q1) {
-            document.getElementById('gauge_v').innerHTML = "";
-            _q4 = {};
-            _z8();
-        }
+    function _0x91a2() {
+        document.getElementById('table_v').style.display = (_0xfe1 || _0xae2) ? 'none' : 'block';
+        document.getElementById('gauge_v').style.display = _0xfe1 ? 'grid' : 'none';
+        document.getElementById('power_gauge_v').style.display = _0xae2 ? 'grid' : 'none';
+        document.getElementById('p_nav').style.display = _0xae2 ? 'block' : 'none';
+        document.getElementById('btn_tg').innerText = _0xfe1 ? 'XEM DẠNG BẢNG' : 'ACM GAUGE';
+        document.getElementById('btn_pg').innerText = _0xae2 ? 'XEM DẠNG BẢNG' : 'POWER GAUGE (kW)';
     }
-
-    const _v0 = [
+    function _0x7c22() {
+        _0xfe1 = !_0xfe1; _0xae2 = false;
+        _0x91a2();
+        if(_0xfe1) { document.getElementById('gauge_v').innerHTML = ""; _0x1a2 = {}; _0x7a8b(); }
+    }
+    const _0xff0 = [
         { t: '1. Công suất Máy Nén Khí MA (kW)', u: 'kW', l: [
             { id: 'ACM_MA_1', k: 'kw', n: 'ACM MA 1', m: 90 }, { id: 'ACM_MA_2', k: 'kw', n: 'ACM MA 2', m: 90 },
             { id: 'ACM_MA_3', k: 'kw', n: 'ACM MA 3', m: 90 }, { id: 'ACM_MA_4', k: 'kw', n: 'ACM MA 4', m: 90 },
@@ -236,47 +246,93 @@
             { id: 'ACMFAB2/2', k: 'kw', n: 'ACMFAB 2.2', m: 100 }, { id: 'ACMFAB2/3', k: 'kw', n: 'ACMFAB 2.3', m: 100 }
         ]}
     ];
-
-    function _z8() {
-        const box = document.getElementById('gauge_v');
-        if(box.innerHTML === "") {
-            _q4 = {};
-            let html = '';
-            _v0.forEach(s => {
-                html += `<div class="g_title">${s.t}</div>`;
-                s.l.forEach(t => {
-                    const i = t.id.replace(/\//g,'_');
-                    html += `<div class="g_card"><div id="c_${i}"></div><div style="font-weight:700; color:var(--a); font-size:12px; margin-top:5px;">${t.n}</div></div>`;
+    function _0x7a8b() {
+        const _0xg1 = document.getElementById('gauge_v');
+        if(_0xg1.innerHTML === "") {
+            let _0xg2 = '';
+            _0xff0.forEach(_0xg3 => {
+                _0xg2 += `<div class="g_title">${_0xg3.t}</div>`;
+                _0xg3.l.forEach(_0xg4 => {
+                    const _0xg5 = _0xg4.id.replace(/\//g,'_');
+                    _0xg2 += `<div class="g_card"><div id="c_${_0xg5}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${_0xg4.n}</div></div>`;
                 });
             });
-            box.innerHTML = html;
+            _0xg1.innerHTML = _0xg2;
         }
-        if (typeof google === 'undefined' || !google.visualization || !google.visualization.Gauge) return;
-        _v0.forEach(s => {
-            s.l.forEach(t => {
-                const i = t.id.replace(/\//g,'_');
-                const el = document.getElementById(`c_${i}`);
-                if (!el) return;
-                let rv = (_q2[t.id] && _q2[t.id][t.k] !== undefined) ? parseFloat(_q2[t.id][t.k]) : 0; 
-                if (t.id === 'AFAB1' || t.id === 'AFAB2') rv /= 10;
-                let v = Math.round(rv) || 0;
-                let dt = google.visualization.arrayToDataTable([['Label', 'Value'], [s.u, v]]);
-                let op = { width: 155, height: 155, redFrom: t.m * 0.85, redTo: t.m, yellowFrom: t.m * 0.7, yellowTo: t.m * 0.85, minorTicks: 5, max: t.m };
-                try {
-                    if (!_q4[i]) _q4[i] = new google.visualization.Gauge(el);
-                    _q4[i].draw(dt, op);
-                } catch(e) {}
+        if (typeof google === 'undefined' || !google.visualization) return;
+        _0xff0.forEach(_0xg6 => {
+            _0xg6.l.forEach(_0xg7 => {
+                const _0xg8 = _0xg7.id.replace(/\//g,'_');
+                const _0xg9 = document.getElementById(`c_${_0xg8}`);
+                if (!_0xg9) return;
+                let _0xga = (_0xd3c[_0xg7.id] && _0xd3c[_0xg7.id][_0xg7.k] !== undefined) ? parseFloat(_0xd3c[_0xg7.id][_0xg7.k]) : 0;
+                if (_0xg7.id === 'AFAB1' || _0xg7.id === 'AFAB2') _0xga /= 10;
+                let _0xgb = google.visualization.arrayToDataTable([['Label', 'Value'], [_0xg6.u, parseFloat(_0xga.toFixed(1))]]);
+                if (!_0x1a2[_0xg8]) _0x1a2[_0xg8] = new google.visualization.Gauge(_0xg9);
+                _0x1a2[_0xg8].draw(_0xgb, { width: 150, height: 150, redFrom: _0xg7.m*0.8, redTo: _0xg7.m, yellowFrom: _0xg7.m*0.6, yellowTo: _0xg7.m*0.8, max: _0xg7.m });
             });
         });
     }
-
-    function _z9() {
-        if (_q3 && _q3.isConnected()) {
-            const m = new Paho.MQTT.Message(new Date().toLocaleString('vi-VN'));
-            m.destinationName = "dataread"; m.qos = 1; _q3.send(m);
-        }
+    function _0xbb41() {
+        _0xae2 = !_0xae2; _0xfe1 = false;
+        _0x91a2();
+        if(_0xae2) { document.getElementById('power_gauge_v').innerHTML = ""; _0x2c3 = {}; _0x4c5d(); }
     }
-    setInterval(_z9, 300000);
+    function _0x4c5d() {
+        const _0xh1 = document.getElementById('power_gauge_v');
+        if (!_0xh1 || !_0xae2) return;
+        const _0xh2 = ['ACMFAB2', 'ACM', 'ACMFAB1', 'AFAB1', 'AFAB2', 'WWT'];
+        const _0xh3 = {};
+        let _0xh4 = 0;
+        Object.keys(_0xd3c).forEach(_0xh5 => {
+            if (_0xd3c[_0xh5] && typeof _0xd3c[_0xh5] === 'object' && _0xd3c[_0xh5].hasOwnProperty('kw')) {
+                const _0xh6 = (_0xh5.split(/[ /_-]/)[0]).toUpperCase();
+                if (!_0xh2.includes(_0xh6)) {
+                    if (!_0xh3[_0xh6]) _0xh3[_0xh6] = [];
+                    _0xh3[_0xh6].push({ id: _0xh5, val: parseFloat(_0xd3c[_0xh5].kw) });
+                    _0xh4++;
+                }
+            }
+        });
+        Object.keys(_0xh3).forEach(_0xh7 => { _0xh3[_0xh7].sort((a, b) => b.val - a.val); });
+        const _0xh8 = parseInt(_0xh1.getAttribute('data-count') || "0");
+        if (_0xh1.innerHTML === "" || _0xh4 !== _0xh8) {
+            let _0xh9 = ''; let _0xha = '';
+            Object.keys(_0xh3).sort().forEach(_0xhb => {
+                const _0xhc = _0xh3[_0xhb].length;
+                const _0xhd = `p_sec_${_0xhb}`;
+                _0xha += `<button class="p_tab" onclick="document.getElementById('${_0xhd}').scrollIntoView({behavior:'smooth'})">${_0xhb} (${_0xhc})</button>`;
+                _0xh9 += `<div class="g_title" id="${_0xhd}"><span>KHU VỰC: ${_0xhb}</span> <span class="g_count">${_0xhc} Thiết bị</span></div>`;
+                _0xh3[_0xhb].forEach(_0xhe => {
+                    const _0xhf = _0xhe.id.replace(/[^a-z0-9]/gi, '_');
+                    _0xh9 += `<div class="g_card"><div id="pg_${_0xhf}"></div><div style="font-weight:700; font-size:10px; word-break:break-all;">${_0xhe.id}</div></div>`;
+                });
+            });
+            _0xh1.innerHTML = _0xh9;
+            _0xh1.setAttribute('data-count', _0xh4);
+            document.getElementById('p_tabs').innerHTML = _0xha;
+            _0x2c3 = {}; 
+        }
+        if (typeof google === 'undefined' || !google.visualization) return;
+        Object.keys(_0xh3).forEach(_0xi1 => {
+            _0xh3[_0xi1].forEach(_0xi2 => {
+                const _0xi3 = _0xi2.id.replace(/[^a-z0-9]/gi, '_');
+                const _0xi4 = document.getElementById(`pg_${_0xi3}`);
+                if (!_0xi4) return;
+                let _0xi5 = parseFloat(_0xi2.val.toFixed(1)); 
+                let _0xi6 = _0xi5 > 50 ? Math.ceil(_0xi5/100)*200 : 50;
+                let _0xi7 = google.visualization.arrayToDataTable([['Label', 'Value'], ['kW', _0xi5]]);
+                if (!_0x2c3[_0xi3]) { _0x2c3[_0xi3] = new google.visualization.Gauge(_0xi4); }
+                _0x2c3[_0xi3].draw(_0xi7, { width: 140, height: 140, max: _0xi6, redFrom: _0xi6*0.9, redTo: _0xi6, yellowFrom: _0xi6*0.75, yellowTo: _0xi6*0.9 });
+            });
+        });
+    }
+    setInterval(() => {
+        if (_0x99b && _0x99b.isConnected()) {
+            const _0xi8 = new Paho.MQTT.Message(new Date().toLocaleString());
+            _0xi8.destinationName = "dataread"; _0x99b.send(_0xi8);
+        }
+    }, 300000);
 </script>
 </body>
 </html>
