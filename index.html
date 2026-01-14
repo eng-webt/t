@@ -277,6 +277,26 @@
     function _0x4c5d() {
         const _0xh1 = document.getElementById('power_gauge_v');
         if (!_0xh1 || !_0xae2) return;
+        const nameMap = {
+        "ENG/ACP-UB-1/1": "Máy lạnh phòng cân",
+        "ENG/ACP-UB-1/2": "Máy lạnh văn phòng số 4",
+        "ENG/ACP-UB-1/3": "Máy lạnh văn phòng số 3",
+        "ENG/ACP-UB-1/4": "Máy lạnh văn phòng số 2",
+        "ENG/ACP-UB-1/5": "Máy lạnh văn phòng số 1",
+        "ENG/ACP-UB-1/6": "Máy lạnh phòng họp số 3",
+        "ENG/ACP-UB-1/7": "Máy lạnh phòng họp số 2",
+        "ENG/ACP-UB-1/8": "Máy lạnh phòng họp số 1",
+        "ENG/ACP-UB-1/9": "Tổng máy lạnh VP ENG",
+        "ENG/WSP-CP-MA-1": "Nước cấp MA1",
+        "ENG/WSP-CP-MA-2": "Nước cấp MA2",
+        "ENG/ACP-UB-2": "Tủ Septic Tank, Quạt cấp, Máy Lạnh P.Điện",
+        "ENG/LP-UB-2": "Đèn ổ cắm văn phòng",
+        "ENG/LP-SS": "Substation",
+        "ENG/LP-DP": "Máy lạnh Diesel",
+        "ENG/LP-WS": "Workshop2-Traning",
+        "ENG/LP-UB-1": "Workshop1",
+        "ENG/BWP-CP-1": "Bơm lọc cát"
+        };
         const _0xh2 = ['ACMFAB2', 'ACM', 'ACMFAB1', 'AFAB1', 'AFAB2', 'WWT'];
         const _0xh3 = {};
         let _0xh4 = 0;
@@ -301,7 +321,8 @@
                 _0xh9 += `<div class="g_title" id="${_0xhd}"><span>KHU VỰC: ${_0xhb}</span> <span class="g_count">${_0xhc} Thiết bị</span></div>`;
                 _0xh3[_0xhb].forEach(_0xhe => {
                     const _0xhf = _0xhe.id.replace(/[^a-z0-9]/gi, '_');
-                    _0xh9 += `<div class="g_card"><div id="pg_${_0xhf}"></div><div style="font-weight:700; font-size:10px; word-break:break-all;">${_0xhe.id}</div></div>`;
+                    const displayName = nameMap[_0xhe.id] || _0xhe.id;
+                    _0xh9 += `<div class="g_card"><div id="pg_${_0xhf}"></div><div style="font-weight:700; font-size:10px; word-break:break-all; min-height:24px;">${displayName}</div></div>`;
                 });
             });
             _0xh1.innerHTML = _0xh9;
@@ -332,4 +353,5 @@
 </script>
 </body>
 </html>
+
 
