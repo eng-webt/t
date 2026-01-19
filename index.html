@@ -22,13 +22,14 @@
         ._x8 { background: var(--c); padding: 10px 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         ._x9 { margin-bottom: 20px; background: var(--c); padding: 15px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         ._x10 { display: flex; flex-wrap: wrap; gap: 8px; }
-        ._x11 { background: var(--g); border: 1px solid var(--bo); padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex;line-height: 1;margin: 0; align-items: center; gap: 6px; color: var(--t2);text-transform: uppercase; }
-        ._x11:hover { background: var(--a); color: white; border-color: var(--a); transform: translateY(-2px); }
+        ._x11, .p_tab { background: var(--g); border: 1px solid var(--bo); padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; color: var(--t2); text-transform: uppercase; width: 135px; height: 38px; text-align: center; line-height: 1.2; }
+        ._x11:hover, .p_tab:hover { background: var(--a); color: white; border-color: var(--a); }
+        ._x11.active, .p_tab.active { background: var(--a) !important; color: white !important; border-color: var(--a) !important; box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3); }
         ._x12 { background: var(--c); border-radius: 12px; overflow: hidden; border: 1px solid var(--bo); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8fafc; color: var(--t2); padding: 14px 15px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--bo); }
         td { padding: 14px 15px; border-bottom: 1px solid var(--bo); }
-        ._x13 { background: var(--g); font-weight: 800; color: #475569; font-size: 13px; text-transform: uppercase; scroll-margin-top: 20px; }
+        ._x13 { background: var(--g); font-weight: 800; color: #475569; font-size: 13px; text-transform: uppercase; }
         ._x13 td { border-left: 5px solid var(--a); padding: 12px 15px; }
         ._x14 { float: right; background: var(--a); color: white; padding: 2px 10px; border-radius: 6px; font-size: 11px; }
         ._x15 { font-weight: 600; font-size: 15px; color: var(--t1); }
@@ -40,11 +41,9 @@
         .off { background: #fee2e2; color: var(--d); }
         .lo-btn { position: fixed; bottom: 20px; left: 20px; background: #334155; color: white; border: none; padding: 10px 18px; border-radius: 30px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; z-index: 1000; }
         #p_nav { margin: 15px 0; padding: 12px; background: #fff; border-radius: 10px; border: 1px solid var(--bo); display: none; }
-        .p_tab { background: #f1f5f9; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--t2); text-transform: uppercase; transition: 0.2s; }
-        .p_tab:hover { background: var(--a); color: white; }
         .g_grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
         .g_card { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--bo); text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
-        .g_title { grid-column: 1 / -1; color: var(--a); font-weight: 800; font-size: 14px; border-left: 5px solid var(--a); padding: 10px; margin: 20px 0 10px 0; text-transform: uppercase; background: #f1f5f9; width: 100%; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; scroll-margin-top: 20px; }
+        .g_title { grid-column: 1 / -1; color: var(--a); font-weight: 800; font-size: 14px; border-left: 5px solid var(--a); padding: 10px; margin: 20px 0 10px 0; text-transform: uppercase; background: #f1f5f9; width: 100%; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; }
         .g_count { background: var(--a); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
         .btn_g { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 12px; }
         .btn_g:hover { opacity: 0.8; transform: translateY(-1px); }
@@ -54,6 +53,7 @@
             tr { display: block; border-bottom: 10px solid var(--b); }
             td { display: block; text-align: center; border-bottom: 1px solid #f1f5f9; padding: 15px; }
             td::before { content: attr(data-label); font-weight: 700; display: block; font-size: 11px; color: var(--t2); text-transform: uppercase; margin-bottom: 8px; }
+            ._x11, .p_tab { width: calc(50% - 10px); }
         }
     </style>
 </head>
@@ -77,8 +77,9 @@
                 <div id="m_stt" class="st off">Đang kết nối...</div>
                 <div style="margin-top:12px; display:flex; gap:8px;">
                     <button onclick="_0x7c22()" class="btn_g" id="btn_tg">ACM GAUGE</button>
-                    <button onclick="_0xbb41()" class="btn_g" id="btn_pg" style="background:#10b981;">POWER GAUGE (kW)</button>
+                    <button onclick="_0xbb41()" class="btn_g" id="btn_pg" style="background:#10b981;">POWER GAUGE</button>
                     <button onclick="_0x9e1a()" class="btn_g" id="btn_eg" style="background:#f59e0b;">ENERGY GAUGE</button>
+                    <button onclick="_0xForklift()" class="btn_g" id="btn_fl" style="background:#64748b;">FORKLIFT GAUGE</button>
                 </div>
             </div>
             <div class="_x8">
@@ -87,48 +88,195 @@
             </div>
         </div>
         <div id="p_nav">
-            <div style="font-size: 10px; font-weight: 800; color: var(--t2); margin-bottom: 8px; text-transform: uppercase;">Truy cập nhanh:</div>
+            <div style="font-size: 10px; font-weight: 800; color: var(--t2); margin-bottom: 8px; text-transform: uppercase;">Truy cập nhanh (Power):</div>
             <div id="p_tabs" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
         </div>
         <div id="gauge_v" style="display:none;" class="g_grid"></div>
         <div id="power_gauge_v" style="display:none;" class="g_grid"></div>
         <div id="energy_gauge_v" style="display:none;" class="g_grid"></div>
+        <div id="forklift_gauge_v" style="display:none;" class="g_grid"></div>
         <div id="table_v">
             <div class="_x9" id="n_sec" style="display:none;">
-                <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:11px; margin-bottom:10px; display:block;">Truy cập nhanh:</span>
+                <span style="font-weight:700; color:var(--t2); text-transform:uppercase; font-size:11px; margin-bottom:10px; display:block;">Truy cập nhanh (Bảng):</span>
                 <div class="_x10" id="n_btn"></div>
             </div>
             <div class="_x12">
                 <table>
                     <thead><tr><th style="width:35%">Thiết Bị</th><th>Thông Số Hoạt Động</th></tr></thead>
-                    <tbody id="t_body">
-                        <tr id="w_row"><td colspan="2" style="text-align:center; padding:60px; color:var(--t2);">Đang quét tín hiệu...</td></tr>
-                    </tbody>
+                    <tbody id="t_body"><tr id="w_row"><td colspan="2" style="text-align:center; padding:60px; color:var(--t2);">Đang quét tín hiệu...</td></tr></tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
 <script>
-    let _0xfe1 = !1, _0xae2 = !1, _0xd3c = {}, _0x99b, _0x1a2 = {}, _0x2c3 = {}, _0xEnA = !1, _0xEnG = {};
-    window.addEventListener('resize', () => { _0xfe1 && _0x7a8b(); _0xae2 && _0x4c5d(); _0xEnA && _0x8f2c(); });
+    let _0xfe1 = !1, _0xae2 = !1, _0xd3c = {}, _0x99b, _0x1a2 = {}, _0x2c3 = {}, _0xEnA = !1, _0xEnG = {}, _0xFL = !1, _0xFLG = {};
+    let _0xfa = null, _0xfb = null;
+    window.addEventListener('resize', () => { _0xfe1 && _0x7a8b(); _0xae2 && _0x4c5d(); _0xEnA && _0x8f2c(); _0xFL && _0xRenderFL(); });
     google.charts.load('current', {'packages':['gauge']});
-    const _0xCfG = [{t:'1. CNG SYSTEM',u:'Nm3/h',l:[{id:'ENG_NANG_LUONG',k:'gt1',n:'CNG ENG'},{id:'EX_NANG_LUONG',k:'cng_flow',n:'CNG EX'},{id:'ST_NANG_LUONG',k:'cng_flow',n:'CNG ST'},{id:'CO_NANG_LUONG',k:'cng_flow',n:'CNG CO'}]},{t:'2. WATER SYSTEM',u:'m3/h',l:[{id:'EX_NANG_LUONG',k:'water_flow',n:'WATER EX'},{id:'ST_NANG_LUONG',k:'water_flow',n:'WATER ST'},{id:'CO_NANG_LUONG',k:'water_flow',n:'WATER CO'}]},{t:'3. STEAM SYSTEM',u:'kg/h',s:!0,l:[{id:'ENG_NANG_LUONG_STEAM',k:'gt1',n:'STEAM ENG'},{id:'EX_NANG_LUONG',k:'steam_flow',n:'STEAM EX'},{id:'ST_NANG_LUONG',k:'steam_flow',n:'STEAM ST'}]}];
+    const _0xCfG = [
+        {t:'1. CNG SYSTEM',u:'Nm3/h',l:[{id:'ENG_NANG_LUONG',k:'gt1',n:'CNG ENG'},{id:'EX_NANG_LUONG',k:'cng_flow',n:'CNG EX'},{id:'ST_NANG_LUONG',k:'cng_flow',n:'CNG ST'},{id:'CO_NANG_LUONG',k:'cng_flow',n:'CNG CO'}]},
+        {t:'2. WATER SYSTEM',u:'m3/h',l:[{id:'EX_NANG_LUONG',k:'water_flow',n:'WATER EX'},{id:'ST_NANG_LUONG',k:'water_flow',n:'WATER ST'},{id:'CO_NANG_LUONG',k:'water_flow',n:'WATER CO'}]},
+        {t:'3. STEAM SYSTEM',u:'kg/h',s:!0,l:[{id:'ENG_NANG_LUONG_STEAM',k:'gt1',n:'STEAM ENG'},{id:'EX_NANG_LUONG',k:'steam_flow',n:'STEAM EX'},{id:'ST_NANG_LUONG',k:'steam_flow',n:'STEAM ST'}]}
+    ];
     (function(){const _0xf=["29410c","e6be","884b","f2b7","bb5f","8d8c","b5b3cb","azz","8hs","09","nG4","HauW","@","bVn","MeSR",".s1.eu.","hivemq.cloud","datasend"];const _0xe=(...i)=>i.map(x=>_0xf[x]).join('');window._v9={h:_0xe(0,1,2,3,4,5,6)+_0xe(15,16),p:8884,u:_0xe(7,8,9),pw:_0xe(10,11,12,13,14),t:_0xf[17],id:'W_'+Math.random().toString(16).substr(2,8)}})();
     function _0x4a1b(){const _0xa1=document.getElementById('u_in').value,_0xa2=document.getElementById('p_in').value;if(btoa(_0xa1)==='YWRtaW4='&&btoa(_0xa2)==='dGFt'){localStorage.setItem('_auth',btoa('valid_user'));_0x5f32()}else{document.getElementById('l_err').style.display='block'}}
     function _0x5f32(){document.getElementById('l_scr').style.display='none';document.getElementById('d_scr').style.display='block';_0x1122()}
     function _0x9ef2(){localStorage.removeItem('_auth');location.reload()}
     window.onload=()=>{localStorage.getItem('_auth')&&_0x5f32()};
-    function _0x1122(){if(_0x99b){try{_0x99b.disconnect()}catch(e){}}_0x99b=new Paho.MQTT.Client(_v9.h,_v9.p,_v9.id);_0x99b.onConnectionLost=(c)=>{document.getElementById('m_stt').innerText="Mất kết nối!";document.getElementById('m_stt').className="st off";c.errorCode!==0&&setTimeout(_0x1122,5000)};_0x99b.onMessageArrived=(m)=>{try{if(!m.payloadString||!m.payloadString.trim())return;const d=JSON.parse(m.payloadString);for(let k in d){_0xd3c[k]=(typeof d[k]==='object'&&d[k]!==null)?{..._0xd3c[k],...d[k]}:d[k]}_0x2233();_0xfe1&&_0x7a8b();_0xae2&&_0x4c5d();_0xEnA&&_0x8f2c()}catch(e){}};_0x99b.connect({useSSL:!0,userName:_v9.u,password:_v9.pw,onSuccess:()=>{document.getElementById('m_stt').innerText="Trực tuyến";document.getElementById('m_stt').className="st on";_0x99b.subscribe(_v9.t);const msg=new Paho.MQTT.Message(new Date().toLocaleString());msg.destinationName="dataread";_0x99b.send(msg)},onFailure:()=>setTimeout(_0x1122,5000)})}
-    function _0x2233(){const b1=document.getElementById('t_body'),b2=Object.keys(_0xd3c).sort();document.getElementById('m_cnt').innerText=b2.length;const b3={},b4=[];b2.forEach(v=>{const k=(v.split(/[ /_-]/)[0]).toUpperCase();if(!b3[k]){b3[k]=0;b4.push(k)}b3[k]++});if(b4.length>0){document.getElementById('n_sec').style.display='block';document.getElementById('n_btn').innerHTML=b4.map(v=>`<button class="_x11" onclick="document.getElementById('g_${v}').scrollIntoView({behavior:'smooth'})">${v} <span>(${b3[v]})</span></button>`).join('')}let h='',last='';b2.forEach(v=>{const k=(v.split(/[ /_-]/)[0]).toUpperCase();if(k!==last){h+=`<tr class="_x13" id="g_${k}"><td colspan="2">KHU VỰC: ${k}<span class="_x14">${b3[k]} Thiết bị</span></td></tr>`;last=k}const d=_0xd3c[v];let s='';if(typeof d==='object'){for(let x in d)s+=`<div class="_x17">${x}: <b>${d[x]}</b></div>`}else s=`<div class="_x17">Dữ liệu: <b>${d}</b></div>`;h+=`<tr><td class="_x15">${v}</td><td><div class="_x16">${s}</div></td></tr>`});b1.innerHTML=h}
-    function _0x91a2(){const active=_0xfe1||_0xae2||_0xEnA;document.getElementById('table_v').style.display=active?'none':'block';document.getElementById('gauge_v').style.display=_0xfe1?'grid':'none';document.getElementById('power_gauge_v').style.display=_0xae2?'grid':'none';document.getElementById('energy_gauge_v').style.display=_0xEnA?'grid':'none';document.getElementById('p_nav').style.display=_0xae2?'block':'none';document.getElementById('btn_tg').innerText=_0xfe1?'XEM BẢNG':'ACM GAUGE';document.getElementById('btn_pg').innerText=_0xae2?'XEM BẢNG':'POWER GAUGE (kW)';document.getElementById('btn_eg').innerText=_0xEnA?'XEM BẢNG':'ENERGY GAUGE'}
-    function _0x7c22(){const s=_0xfe1;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;if(!s)_0xfe1=!0;_0x91a2();if(_0xfe1){document.getElementById('gauge_v').innerHTML="";_0x1a2={};_0x7a8b()}}
-    const _0xff0=[{t:'1. Công suất Máy Nén Khí MA (kW)',u:'kW',l:[{id:'ACM_MA_1',k:'kw',n:'ACM MA 1',m:90},{id:'ACM_MA_2',k:'kw',n:'ACM MA 2',m:90},{id:'ACM_MA_3',k:'kw',n:'ACM MA 3',m:90},{id:'ACM_MA_4',k:'kw',n:'ACM MA 4',m:90},{id:'ACM_MA_5',k:'kw',n:'ACM MA 5',m:90},{id:'ACM_MA_6',k:'kw',n:'ACM MA 6',m:90}]},{t:'2. Lưu lượng Hệ thống MA (Nm³/h)',u:'Nm³/h',l:[{id:'FLOW_MA',k:'luuluong',n:'FLOW MA AIR',m:4000},{id:'EX_NANG_LUONG',k:'air_flow',n:'FLOW EX AIR',m:2000},{id:'CA/ENE',k:'giatri',n:'FLOW CA AIR',m:2000},{id:'DP/ENE',k:'giatri',n:'FLOW DP AIR',m:1000},{id:'CO_NANG_LUONG',k:'air_flow',n:'FLOW CO AIR',m:1000},{id:'ST_NANG_LUONG',k:'air_flow',n:'FLOW ST AIR',m:1000}]},{t:'3. Lưu lượng Khu vực FAB (Nm³/h)',u:'Nm³/h',l:[{id:'AFAB1',k:'flow',n:'FLOW FAB 1 AIR',m:1500},{id:'AFAB2',k:'flow',n:'FLOW FAB 2 AIR',m:1500}]},{t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100}]}];
-    function _0x7a8b(){const g1=document.getElementById('gauge_v');if(g1.innerHTML===""){let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{const id=g4.id.replace(/\//g,'_');h+=`<div class="g_card"><div id="c_${id}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${g4.n}</div></div>`})});g1.innerHTML=h}if(typeof google==='undefined'||!google.visualization)return;_0xff0.forEach(g6=>{g6.l.forEach(g7=>{const id=g7.id.replace(/\//g,'_'),el=document.getElementById(`c_${id}`);if(!el)return;let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;if(g7.id==='AFAB1'||g7.id==='AFAB2')v/=10;let dt=google.visualization.arrayToDataTable([['Label','Value'],[g6.u,parseFloat(v.toFixed(1))]]);if(!_0x1a2[id])_0x1a2[id]=new google.visualization.Gauge(el);_0x1a2[id].draw(dt,{width:150,height:150,redFrom:g7.m*0.8,redTo:g7.m,yellowFrom:g7.m*0.6,yellowTo:g7.m*0.8,max:g7.m})})})}
-    function _0xbb41(){const s=_0xae2;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;if(!s)_0xae2=!0;_0x91a2();if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}}
-    function _0x4c5d(){const h1=document.getElementById('power_gauge_v');if(!h1||!_0xae2)return;const map={"ENG/ACP-UB-1/1":"Máy lạnh phòng cân","ENG/ACP-UB-1/2":"Máy lạnh văn phòng số 4","ENG/ACP-UB-1/3":"Máy lạnh văn phòng số 3","ENG/ACP-UB-1/4":"Máy lạnh văn phòng số 2","ENG/ACP-UB-1/5":"Máy lạnh văn phòng số 1","ENG/ACP-UB-1/6":"Máy lạnh phòng họp số 3","ENG/ACP-UB-1/7":"Máy lạnh phòng họp số 2","ENG/ACP-UB-1/8":"Máy lạnh phòng họp số 1","ENG/ACP-UB-1/9":"Tổng máy lạnh VP ENG","ENG/WSP-CP-MA-1":"Nước cấp MA1","ENG/WSP-CP-MA-2":"Nước cấp MA2","ENG/ACP-UB-2":"Tủ Septic Tank, Quạt cấp, Máy Lạnh P.Điện","ENG/LP-UB-2":"Đèn ổ cắm văn phòng","ENG/LP-SS":"Substation","ENG/LP-DP":"Máy lạnh Diesel","ENG/LP-WS":"Workshop2-Traning","ENG/LP-UB-1":"Workshop1","ENG/BWP-CP-1":"Bơm lọc cát"};const filter=['ACMFAB2','ACM','ACMFAB1','AFAB1','AFAB2','WWT'],res={};let total=0;Object.keys(_0xd3c).forEach(k=>{if(_0xd3c[k]&&typeof _0xd3c[k]==='object'&&_0xd3c[k].hasOwnProperty('kw')){const g=(k.split(/[ /_-]/)[0]).toUpperCase();if(!filter.includes(g)){if(!res[g])res[g]=[];res[g].push({id:k,val:parseFloat(_0xd3c[k].kw)});total++}}});Object.keys(res).forEach(k=>res[k].sort((a,b)=>b.val-a.val));if(h1.innerHTML===""||total!==parseInt(h1.getAttribute('data-count')||"0")){let html='',tabs='';Object.keys(res).sort().forEach(k=>{const len=res[k].length,sid=`p_sec_${k}`;tabs+=`<button class="p_tab" onclick="document.getElementById('${sid}').scrollIntoView({behavior:'smooth'})">${k} (${len})</button>`;html+=`<div class="g_title" id="${sid}"><span>KHU VỰC: ${k}</span> <span class="g_count">${len} Thiết bị</span></div>`;res[k].forEach(e=>{const id=e.id.replace(/[^a-z0-9]/gi,'_'),name=map[e.id]||e.id;html+=`<div class="g_card"><div id="pg_${id}"></div><div style="font-weight:700; font-size:10px; word-break:break-all; min-height:24px;">${name}</div></div>`})});h1.innerHTML=html;h1.setAttribute('data-count',total);document.getElementById('p_tabs').innerHTML=tabs;_0x2c3={}}if(typeof google==='undefined'||!google.visualization)return;Object.keys(res).forEach(k=>{res[k].forEach(e=>{const id=e.id.replace(/[^a-z0-9]/gi,'_'),el=document.getElementById(`pg_${id}`);if(!el)return;let v=parseFloat(e.val.toFixed(1)),max=v>50?Math.ceil(v/100)*200:50;let dt=google.visualization.arrayToDataTable([['Label','Value'],['kW',v]]);if(!_0x2c3[id])_0x2c3[id]=new google.visualization.Gauge(el);_0x2c3[id].draw(dt,{width:140,height:140,max:max,redFrom:max*0.9,redTo:max,yellowFrom:max*0.75,yellowTo:max*0.9})})})}
-    function _0x9e1a(){const s=_0xEnA;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;if(!s)_0xEnA=!0;_0x91a2();if(_0xEnA){document.getElementById('energy_gauge_v').innerHTML="";_0xEnG={};_0x8f2c()}}
-    function _0x8f2c(){if(typeof google==='undefined'||!google.visualization)return;const c=document.getElementById('energy_gauge_v');if(!c||!_0xEnA)return;if(c.innerHTML===""){let h='';_0xCfG.forEach((g,i)=>{h+=`<div class="g_title">${g.t}</div>`;g.l.forEach(it=>{const uid=`en_${i}_${it.id.replace(/\//g,'_')}_${it.k}`;h+=`<div class="g_card"><div id="${uid}"></div><div style="font-weight:700; font-size:11px;">${it.n}</div></div>`})});c.innerHTML=h}_0xCfG.forEach((g,i)=>{g.l.forEach(it=>{const uid=`en_${i}_${it.id.replace(/\//g,'_')}_${it.k}`,el=document.getElementById(uid);if(!el)return;let v=(_0xd3c[it.id]&&_0xd3c[it.id][it.k]!==undefined)?parseFloat(_0xd3c[it.id][it.k]):0,mG=g.s?200:50,step=g.s?500:100,mx;if(v<=mG)mx=mG;else{mx=Math.ceil(v/step)*step;if(mx-v<(step*0.2))mx+=step}let dt=google.visualization.arrayToDataTable([['Label','Value'],[g.u,parseFloat(v.toFixed(1))]]);if(!_0xEnG[uid])_0xEnG[uid]=new google.visualization.Gauge(el);_0xEnG[uid].draw(dt,{width:150,height:150,max:mx,redFrom:mx*0.9,redTo:mx,yellowFrom:mx*0.75,yellowTo:mx*0.9})})})}
+    function _0x1122(){
+        if(_0x99b){try{_0x99b.disconnect()}catch(e){}}
+        _0x99b=new Paho.MQTT.Client(_v9.h,_v9.p,_v9.id);
+        _0x99b.onConnectionLost=(c)=>{document.getElementById('m_stt').innerText="Mất kết nối!";document.getElementById('m_stt').className="st off";c.errorCode!==0&&setTimeout(_0x1122,5000)};
+        _0x99b.onMessageArrived=(m)=>{
+            try{
+                if(!m.payloadString||!m.payloadString.trim())return;
+                const d=JSON.parse(m.payloadString);
+                for(let k in d){_0xd3c[k]=(typeof d[k]==='object'&&d[k]!==null)?{..._0xd3c[k],...d[k]}:d[k]}
+                _0x2233(); _0xfe1 && _0x7a8b(); _0xEnA && _0x8f2c(); _0xae2 && _0xUpdV(); _0xFL && _0xRenderFL();
+            }catch(e){}
+        };
+        _0x99b.connect({useSSL:!0,userName:_v9.u,password:_v9.pw,onSuccess:()=>{
+            document.getElementById('m_stt').innerText="Trực tuyến";
+            document.getElementById('m_stt').className="st on";
+            _0x99b.subscribe(_v9.t);
+            const initMsg = new Paho.MQTT.Message(new Date().toLocaleString());
+            initMsg.destinationName = "dataread";
+            _0x99b.send(initMsg);
+            _0x4c5d();
+        },onFailure:()=>setTimeout(_0x1122,5000)})
+    }
+    setInterval(()=>{if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}},30000);
+    function _0xUpdV(){
+        if(typeof google==='undefined'||!google.visualization)return;
+        Object.keys(_0x2c3).forEach(id=>{
+            const rK=Object.keys(_0xd3c).find(k=>k.replace(/[^a-z0-9]/gi,'_')===id);
+            if(rK&&_0xd3c[rK].kw!==undefined){
+                let v=parseFloat(_0xd3c[rK].kw.toFixed(1)),max=v>50?Math.ceil(v/100)*200:50;
+                let dt=google.visualization.arrayToDataTable([['Label','Value'],['kW',v]]);
+                _0x2c3[id].draw(dt,{width:140,height:140,max:max,redFrom:max*0.9,redTo:max,yellowFrom:max*0.75,yellowTo:max*0.9});
+            }
+        });
+    }
+    function _0x00a1(v){_0xfa=v;_0x2233()}
+    function _0x00a2(v){_0xfb=v;document.getElementById('power_gauge_v').innerHTML="";_0x4c5d()}
+    function _0x2233(){
+        const b1=document.getElementById('t_body'),b2=Object.keys(_0xd3c).sort();
+        document.getElementById('m_cnt').innerText=b2.length;
+        const b3={},b4=[];
+        b2.forEach(v=>{const k=(v.split(/[ /_-]/)[0]).toUpperCase();if(!b3[k]){b3[k]=0;b4.push(k)}b3[k]++});
+        if(b4.length>0){
+            document.getElementById('n_sec').style.display='block';
+            let hb=`<button class="_x11 ${_0xfa===null?'active':''}" onclick="_0x00a1(null)">TẤT CẢ (${b2.length})</button>`;
+            hb+=b4.map(v=>`<button class="_x11 ${_0xfa===v?'active':''}" onclick="_0x00a1('${v}')">${v} (${b3[v]})</button>`).join('');
+            document.getElementById('n_btn').innerHTML=hb;
+        }
+        let h='',ls='';
+        b2.forEach(v=>{
+            const k=(v.split(/[ /_-]/)[0]).toUpperCase();
+            if(_0xfa&&k!==_0xfa)return;
+            if(k!==ls){h+=`<tr class="_x13"><td colspan="2">KHU VỰC: ${k}<span class="_x14">${b3[k]} Thiết bị</span></td></tr>`;ls=k}
+            const d=_0xd3c[v];
+            let s='';
+            if(typeof d==='object'){for(let x in d)s+=`<div class="_x17">${x}: <b>${d[x]}</b></div>`}else s=`<div class="_x17">Dữ liệu: <b>${d}</b></div>`;
+            h+=`<tr><td class="_x15">${v}</td><td><div class="_x16">${s}</div></td></tr>`
+        });
+        b1.innerHTML=h;
+    }
+    function _0x91a2(){
+        const a=_0xfe1,b=_0xae2,c=_0xEnA,d=_0xFL;
+        document.getElementById('table_v').style.display=(a||b||c||d)?'none':'block';
+        document.getElementById('gauge_v').style.display=a?'grid':'none';
+        document.getElementById('power_gauge_v').style.display=b?'grid':'none';
+        document.getElementById('energy_gauge_v').style.display=c?'grid':'none';
+        document.getElementById('forklift_gauge_v').style.display=d?'grid':'none';
+        document.getElementById('p_nav').style.display=b?'block':'none';
+        document.getElementById('btn_tg').innerText=a?'XEM BẢNG':'ACM GAUGE';
+        document.getElementById('btn_pg').innerText=b?'XEM BẢNG':'POWER GAUGE';
+        document.getElementById('btn_eg').innerText=c?'XEM BẢNG':'ENERGY GAUGE';
+        document.getElementById('btn_fl').innerText=d?'XEM BẢNG':'FORKLIFT GAUGE';
+    }
+    function _0x7c22(){_0xfe1=!_0xfe1;_0xae2=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xfe1){document.getElementById('gauge_v').innerHTML="";_0x1a2={};_0x7a8b()}}
+    function _0xbb41(){_0xae2=!_0xae2;_0xfe1=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}}
+    function _0x9e1a(){_0xEnA=!_0xEnA;_0xfe1=!1;_0xae2=!1;_0xFL=!1;_0x91a2();if(_0xEnA){document.getElementById('energy_gauge_v').innerHTML="";_0xEnG={};_0x8f2c()}}
+    function _0xForklift(){_0xFL=!_0xFL;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;_0x91a2();if(_0xFL){document.getElementById('forklift_gauge_v').innerHTML="";_0xFLG={};_0xRenderFL()}}
+    function _0x4c5d(){
+        const h1=document.getElementById('power_gauge_v');if(!h1||!_0xae2)return;
+        const m={"ENG/ACP-UB-1/1":"Máy lạnh phòng cân","ENG/ACP-UB-1/2":"Máy lạnh văn phòng số 4","ENG/ACP-UB-1/3":"Máy lạnh văn phòng số 3","ENG/ACP-UB-1/4":"Máy lạnh văn phòng số 2","ENG/ACP-UB-1/5":"Máy lạnh văn phòng số 1","ENG/ACP-UB-1/6":"Máy lạnh phòng họp số 3","ENG/ACP-UB-1/7":"Máy lạnh phòng họp số 2","ENG/ACP-UB-1/8":"Máy lạnh phòng họp số 1","ENG/ACP-UB-1/9":"Tổng máy lạnh VP ENG","ENG/WSP-CP-MA-1":"Nước cấp MA1","ENG/WSP-CP-MA-2":"Nước cấp MA2","ENG/ACP-UB-2":"Tủ Septic Tank, Quạt cấp, Máy Lạnh P.Điện","ENG/LP-UB-2":"Đèn ổ cắm văn phòng","ENG/LP-SS":"Substation","ENG/LP-DP":"Máy lạnh Diesel","ENG/LP-WS":"Workshop2-Traning","ENG/LP-UB-1":"Workshop1","ENG/BWP-CP-1":"Bơm lọc cát"};
+        const f=['ACMFAB2','ACM','ACMFAB1','AFAB1','AFAB2','WWT'],res={};
+        Object.keys(_0xd3c).forEach(k=>{if(_0xd3c[k]&&_0xd3c[k].kw!==undefined){const g=(k.split(/[ /_-]/)[0]).toUpperCase();if(!f.includes(g)){if(!res[g])res[g]=[];res[g].push({id:k,val:parseFloat(_0xd3c[k].kw)})}}});
+        Object.keys(res).forEach(k=>res[k].sort((a,b)=>b.val-a.val));
+        let ts=`<button class="p_tab ${_0xfb===null?'active':''}" onclick="_0x00a2(null)">TẤT CẢ</button>`;
+        Object.keys(res).sort().forEach(k=>{ts+=`<button class="p_tab ${_0xfb===k?'active':''}" onclick="_0x00a2('${k}')">${k} (${res[k].length})</button>`});
+        document.getElementById('p_tabs').innerHTML=ts;
+        if(h1.innerHTML===""){
+            let html='';
+            Object.keys(res).sort().forEach(k=>{
+                if(_0xfb&&k!==_0xfb)return;
+                html+=`<div class="g_title"><span>KHU VỰC: ${k}</span> <span class="g_count">${res[k].length} Thiết bị</span></div>`;
+                res[k].forEach(e=>{const id=e.id.replace(/[^a-z0-9]/gi,'_'),n=m[e.id]||e.id;html+=`<div class="g_card"><div id="pg_${id}"></div><div style="font-weight:700; font-size:10px; word-break:break-all; min-height:24px;">${n}</div></div>`})
+            });
+            h1.innerHTML=html;_0x2c3={};
+        }
+        Object.keys(res).forEach(k=>{
+            if(_0xfb&&k!==_0xfb)return;
+            res[k].forEach(e=>{
+                const id=e.id.replace(/[^a-z0-9]/gi,'_'),el=document.getElementById(`pg_${id}`);
+                if(!el)return;
+                let v=parseFloat(e.val.toFixed(1)),max=v>50?Math.ceil(v/100)*200:50;
+                let dt=google.visualization.arrayToDataTable([['Label','Value'],['kW',v]]);
+                if(!_0x2c3[id])_0x2c3[id]=new google.visualization.Gauge(el);
+                _0x2c3[id].draw(dt,{width:140,height:140,max:max,redFrom:max*0.9,redTo:max,yellowFrom:max*0.75,yellowTo:max*0.9})
+            })
+        })
+    }
+    const _0xff0=[
+        {t:'1. Công suất Máy Nén Khí MA (kW)',u:'kW',l:[{id:'ACM_MA_1',k:'kw',n:'ACM MA 1',m:90},{id:'ACM_MA_2',k:'kw',n:'ACM MA 2',m:90},{id:'ACM_MA_3',k:'kw',n:'ACM MA 3',m:90},{id:'ACM_MA_4',k:'kw',n:'ACM MA 4',m:90},{id:'ACM_MA_5',k:'kw',n:'ACM MA 5',m:90},{id:'ACM_MA_6',k:'kw',n:'ACM MA 6',m:90}]},
+        {t:'2. Lưu lượng Hệ thống MA (Nm³/h)',u:'Nm³/h',l:[{id:'FLOW_MA',k:'luuluong',n:'FLOW MA AIR',m:4000},{id:'EX_NANG_LUONG',k:'air_flow',n:'FLOW EX AIR',m:2000},{id:'CA/ENE',k:'giatri',n:'FLOW CA AIR',m:2000},{id:'DP/ENE',k:'giatri',n:'FLOW DP AIR',m:1000},{id:'CO_NANG_LUONG',k:'air_flow',n:'FLOW CO AIR',m:1000},{id:'ST_NANG_LUONG',k:'air_flow',n:'FLOW ST AIR',m:1000}]},
+        {t:'3. Lưu lượng Khu vực FAB (Nm³/h)',u:'Nm³/h',l:[{id:'AFAB1',k:'flow',n:'FLOW FAB 1 AIR',m:1500},{id:'AFAB2',k:'flow',n:'FLOW FAB 2 AIR',m:1500}]},
+        {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100}]}
+    ];
+    function _0x7a8b(){
+        const g1=document.getElementById('gauge_v');
+        if(g1.innerHTML===""){
+            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{const id=g4.id.replace(/\//g,'_');h+=`<div class="g_card"><div id="c_${id}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${g4.n}</div></div>`})});
+            g1.innerHTML=h
+        }
+        _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
+            const id=g7.id.replace(/\//g,'_'),el=document.getElementById(`c_${id}`);if(!el)return;
+            let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;if(g7.id==='AFAB1'||g7.id==='AFAB2')v/=10;
+            let dt=google.visualization.arrayToDataTable([['Label','Value'],[g6.u,parseFloat(v.toFixed(1))]]);
+            if(!_0x1a2[id])_0x1a2[id]=new google.visualization.Gauge(el);
+            _0x1a2[id].draw(dt,{width:150,height:150,redFrom:g7.m*0.8,redTo:g7.m,yellowFrom:g7.m*0.6,yellowTo:g7.m*0.8,max:g7.m})
+        })})
+    }
+    function _0x8f2c(){
+        if(typeof google==='undefined'||!google.visualization)return;
+        const c=document.getElementById('energy_gauge_v');if(!c||!_0xEnA)return;
+        if(c.innerHTML===""){
+            let h='';_0xCfG.forEach((g,i)=>{h+=`<div class="g_title">${g.t}</div>`;g.l.forEach(it=>{const uid=`en_${i}_${it.id.replace(/\//g,'_')}_${it.k}`;h+=`<div class="g_card"><div id="${uid}"></div><div style="font-weight:700; font-size:11px;">${it.n}</div></div>`})});
+            c.innerHTML=h
+        }
+        _0xCfG.forEach((g,i)=>{g.l.forEach(it=>{
+            const uid=`en_${i}_${it.id.replace(/\//g,'_')}_${it.k}`,el=document.getElementById(uid);if(!el)return;
+            let v=(_0xd3c[it.id]&&_0xd3c[it.id][it.k]!==undefined)?parseFloat(_0xd3c[it.id][it.k]):0,mG=g.s?200:50,step=g.s?500:100,mx;
+            if(v<=mG)mx=mG;else{mx=Math.ceil(v/step)*step;if(mx-v<(step*0.2))mx+=step}
+            let dt=google.visualization.arrayToDataTable([['Label','Value'],[g.u,parseFloat(v.toFixed(1))]]);
+            if(!_0xEnG[uid])_0xEnG[uid]=new google.visualization.Gauge(el);
+            _0xEnG[uid].draw(dt,{width:150,height:150,max:mx,redFrom:mx*0.9,redTo:mx,yellowFrom:mx*0.75,yellowTo:mx*0.9})
+        })})
+    }
+    function _0xRenderFL(){
+        if(typeof google==='undefined'||!google.visualization)return;
+        const c=document.getElementById('forklift_gauge_v');if(!c||!_0xFL)return;
+        const dI='forklift/fab03temp',uid='fl_gauge_1';
+        if(c.innerHTML==="")c.innerHTML=`<div class="g_title">FORKLIFT MONITORING</div><div class="g_card"><div id="${uid}"></div><div style="font-weight:700; font-size:11px;">FORKLIFT FAB03</div></div>`;
+        const el=document.getElementById(uid);if(!el)return;
+        let v=(_0xd3c[dI]&&_0xd3c[dI]['value']!==undefined)?parseFloat(_0xd3c[dI]['value']):0,mx=100;
+        let dt=google.visualization.arrayToDataTable([['Label','Value'],['°C',parseFloat(v.toFixed(1))]]);
+        if(!_0xFLG[uid])_0xFLG[uid]=new google.visualization.Gauge(el);
+        _0xFLG[uid].draw(dt,{width:150,height:150,max:mx,redFrom:mx*0.9,redTo:mx,yellowFrom:mx*0.75,yellowTo:mx*0.9});
+    }
     setInterval(()=>{if(_0x99b&&_0x99b.isConnected()){const m=new Paho.MQTT.Message(new Date().toLocaleString());m.destinationName="dataread";_0x99b.send(m)}},60000);
 </script>
 </body>
