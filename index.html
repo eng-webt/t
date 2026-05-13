@@ -230,24 +230,36 @@
             })
         })
     }
+    
+    // Đã cập nhật mục số 2 để chèn thêm "Áp suất khí EX" vào cấu hình _0xff0
     const _0xff0=[
-        {t:'1. Công suất Máy Nén Khí MA (kW)',u:'kW',l:[{id:'ACM_MA_1',k:'kw',n:'ACM MA 1',m:90},{id:'ACM_MA_2',k:'kw',n:'ACM MA 2',m:90},{id:'ACM_MA_3',k:'kw',n:'ACM MA 3',m:90},{id:'ACM_MA_4',k:'kw',n:'ACM MA 4',m:90},{id:'ACM_MA_5',k:'kw',n:'ACM MA 5',m:90},{id:'ACM_MA_6',k:'kw',n:'ACM MA 6',m:90}]},
-        {t:'2. Lưu lượng Hệ thống MA (Nm³/h)',u:'Nm³/h',l:[{id:'FLOW_MA',k:'luuluong',n:'FLOW MA AIR',m:4000},{id:'EX_NANG_LUONG',k:'air_flow',n:'FLOW EX AIR',m:3000},{id:'CA/ENE',k:'giatri',n:'FLOW CA AIR',m:2000},{id:'DP/ENE',k:'giatri',n:'FLOW DP AIR',m:1000},{id:'CO_NANG_LUONG',k:'air_flow',n:'FLOW CO AIR',m:1000},{id:'ST_NANG_LUONG',k:'air_flow',n:'FLOW ST AIR',m:1000}]},
+        {t:'1. Công suất Máy Nén Khí MA (kW)',u:'kW',l:[{id:'ACM_MA_1',k:'kw',n:'ACM MA 1',m:90,yF:83,rF:84},{id:'ACM_MA_2',k:'kw',n:'ACM MA 2',m:90,yF:83,rF:84},{id:'ACM_MA_3',k:'kw',n:'ACM MA 3',m:90,yF:80,rF:81},{id:'ACM_MA_4',k:'kw',n:'ACM MA 4',m:90,yF:80,rF:81},{id:'ACM_MA_5',k:'kw',n:'ACM MA 5',m:90,yF:80,rF:81},{id:'ACM_MA_6',k:'kw',n:'ACM MA 6',m:90,yF:80,rF:81}]},
+        {t:'2. Lưu lượng Hệ thống MA (Nm³/h)',u:'Nm³/h',l:[{id:'FLOW_MA',k:'luuluong',n:'FLOW MA AIR',m:4500},{id:'EX_NANG_LUONG',k:'air_flow',n:'FLOW EX AIR',m:3500},{id:'EX_NANG_LUONG',k:'air_p',n:'EX AIR PRESSURE',m:10,u:'bar'},{id:'CA/ENE',k:'giatri',n:'FLOW CA AIR',m:2000},{id:'DP/ENE',k:'giatri',n:'FLOW DP AIR',m:1000},{id:'CO_NANG_LUONG',k:'air_flow',n:'FLOW CO AIR',m:1000},{id:'ST_NANG_LUONG',k:'air_flow',n:'FLOW ST AIR',m:1000}]},
         {t:'3. Lưu lượng Khu vực FAB (Nm³/h)',u:'Nm³/h',l:[{id:'AFAB1',k:'flow',n:'FLOW FAB 1 AIR',m:1500},{id:'AFAB2',k:'flow',n:'FLOW FAB 2 AIR',m:1500}]},
-        {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100}]}
+        {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100,yF:91,rF:92},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100,yF:91,rF:92},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100,yF:91,rF:92},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100,yF:91,rF:92},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100,yF:91,rF:92},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100,yF:91,rF:92}]}
     ];
+    
     function _0x7a8b(){
+        if(typeof google==='undefined'||!google.visualization)return;
         const g1=document.getElementById('gauge_v');
         if(g1.innerHTML===""){
-            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{const id=g4.id.replace(/\//g,'_');h+=`<div class="g_card"><div id="c_${id}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${g4.n}</div></div>`})});
+            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{const uid=(g4.id+'_'+g4.k).replace(/[^a-zA-Z0-9]/g,'_');h+=`<div class="g_card"><div id="c_${uid}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${g4.n}</div></div>`})});
             g1.innerHTML=h
         }
         _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
-            const id=g7.id.replace(/\//g,'_'),el=document.getElementById(`c_${id}`);if(!el)return;
+            const uid=(g7.id+'_'+g7.k).replace(/[^a-zA-Z0-9]/g,'_');
+            const el=document.getElementById(`c_${uid}`);if(!el)return;
             let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;if(g7.id==='AFAB1'||g7.id==='AFAB2')v/=10;
-            let dt=google.visualization.arrayToDataTable([['Label','Value'],[g6.u,parseFloat(v.toFixed(1))]]);
-            if(!_0x1a2[id])_0x1a2[id]=new google.visualization.Gauge(el);
-            _0x1a2[id].draw(dt,{width:150,height:150,redFrom:g7.m*0.8,redTo:g7.m,yellowFrom:g7.m*0.6,yellowTo:g7.m*0.8,max:g7.m})
+            // Cập nhật ưu tiên lấy unit g7.u nếu có, nếu không lấy theo mục g6.u
+            let dt=google.visualization.arrayToDataTable([['Label','Value'],[g7.u||g6.u,parseFloat(v.toFixed(1))]]);
+            if(!_0x1a2[uid])_0x1a2[uid]=new google.visualization.Gauge(el);
+            
+            // Xử lý logic vạch màu tuỳ chỉnh hoặc mặc định (60% - 80%)
+            let yFrom = g7.yF !== undefined ? g7.yF : g7.m * 0.6;
+            let yTo   = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
+            let rFrom = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
+
+            _0x1a2[uid].draw(dt,{width:150,height:150,redFrom:rFrom,redTo:g7.m,yellowFrom:yFrom,yellowTo:yTo,max:g7.m})
         })})
     }
     function _0x8f2c(){
