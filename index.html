@@ -47,6 +47,12 @@
         .g_count { background: var(--a); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
         .btn_g { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 12px; }
         .btn_g:hover { opacity: 0.8; transform: translateY(-1px); }
+        
+        /* Cảnh báo bằng màu sắc cho thiết bị */
+        @keyframes alertBlink { 0%, 100% { background-color: #fee2e2; color: #ef4444; } 50% { background-color: transparent; color: #ef4444; } }
+        .warn-y { background-color: #fef3c7 !important; color: #d97706 !important; border: 1px solid #fcd34d; }
+        .warn-r { animation: alertBlink 1s infinite !important; border: 1px solid #fca5a5; }
+
         @media (max-width: 600px) {
             ._x7 { flex-direction: column; text-align: center; }
             thead { display: none; }
@@ -231,7 +237,6 @@
         })
     }
     
-    // Đã cập nhật mục số 2 để chèn thêm "Áp suất khí EX" vào cấu hình _0xff0
     const _0xff0=[
         {t:'1. Công suất Máy Nén Khí MA (kW)',u:'kW',l:[{id:'ACM_MA_1',k:'kw',n:'ACM MA 1',m:90,yF:83,rF:84},{id:'ACM_MA_2',k:'kw',n:'ACM MA 2',m:90,yF:83,rF:84},{id:'ACM_MA_3',k:'kw',n:'ACM MA 3',m:90,yF:80,rF:81},{id:'ACM_MA_4',k:'kw',n:'ACM MA 4',m:90,yF:80,rF:81},{id:'ACM_MA_5',k:'kw',n:'ACM MA 5',m:90,yF:80,rF:81},{id:'ACM_MA_6',k:'kw',n:'ACM MA 6',m:90,yF:80,rF:81}]},
         {t:'2. Lưu lượng Hệ thống MA (Nm³/h)',u:'Nm³/h',l:[{id:'FLOW_MA',k:'luuluong',n:'FLOW MA AIR',m:4500},{id:'EX_NANG_LUONG',k:'air_flow',n:'FLOW EX AIR',m:3500},{id:'EX_NANG_LUONG',k:'air_p',n:'EX AIR PRESSURE',m:10,u:'bar'},{id:'CA/ENE',k:'giatri',n:'FLOW CA AIR',m:2000},{id:'DP/ENE',k:'giatri',n:'FLOW DP AIR',m:1000},{id:'CO_NANG_LUONG',k:'air_flow',n:'FLOW CO AIR',m:1000},{id:'ST_NANG_LUONG',k:'air_flow',n:'FLOW ST AIR',m:1000}]},
@@ -243,21 +248,40 @@
         if(typeof google==='undefined'||!google.visualization)return;
         const g1=document.getElementById('gauge_v');
         if(g1.innerHTML===""){
-            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{const uid=(g4.id+'_'+g4.k).replace(/[^a-zA-Z0-9]/g,'_');h+=`<div class="g_card"><div id="c_${uid}"></div><div style="font-weight:700; color:var(--a); font-size:11px;">${g4.n}</div></div>`})});
+            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{
+                const uid=(g4.id+'_'+g4.k).replace(/[^a-zA-Z0-9]/g,'_');
+                // Thêm ID cho thẻ tên để xử lý hiển thị cảnh báo, kèm hiển thị cả chỉ số
+                h+=`<div class="g_card"><div id="c_${uid}"></div><div id="t_${uid}" style="font-weight:700; color:var(--a); font-size:12px; margin-top:8px; padding:4px 8px; border-radius:6px; transition:0.3s; text-align:center; min-width:100px;">${g4.n}</div></div>`
+            })});
             g1.innerHTML=h
         }
         _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
             const uid=(g7.id+'_'+g7.k).replace(/[^a-zA-Z0-9]/g,'_');
             const el=document.getElementById(`c_${uid}`);if(!el)return;
-            let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;if(g7.id==='AFAB1'||g7.id==='AFAB2')v/=10;
-            // Cập nhật ưu tiên lấy unit g7.u nếu có, nếu không lấy theo mục g6.u
+            
+            let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;
+            if(g7.id==='AFAB1'||g7.id==='AFAB2') v/=10;
+            if(g7.k==='air_p') v/=1000; // Xử lý chia 1000 cho áp suất khí EX
+            
             let dt=google.visualization.arrayToDataTable([['Label','Value'],[g7.u||g6.u,parseFloat(v.toFixed(1))]]);
             if(!_0x1a2[uid])_0x1a2[uid]=new google.visualization.Gauge(el);
             
-            // Xử lý logic vạch màu tuỳ chỉnh hoặc mặc định (60% - 80%)
             let yFrom = g7.yF !== undefined ? g7.yF : g7.m * 0.6;
             let yTo   = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
             let rFrom = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
+
+            // Xử lý đổi màu nhấp nháy cho thẻ tên nằm dưới đồng hồ
+            const tEl = document.getElementById(`t_${uid}`);
+            if(tEl) {
+                // Trả lại tên hiển thị như bình thường, không kèm giá trị số
+                tEl.innerText = g7.n;
+                tEl.className = ''; // Xóa cảnh báo cũ
+                if(v >= rFrom) {
+                    tEl.classList.add('warn-r');
+                } else if(v >= yFrom) {
+                    tEl.classList.add('warn-y');
+                }
+            }
 
             _0x1a2[uid].draw(dt,{width:150,height:150,redFrom:rFrom,redTo:g7.m,yellowFrom:yFrom,yellowTo:yTo,max:g7.m})
         })})
