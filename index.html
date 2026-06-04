@@ -346,11 +346,7 @@
         if(idx > -1) {
             _0xSelectedCharts.splice(idx, 1);
         } else {
-            if(_0xSelectedCharts.length >= 6) {
-                alert("Nên chọn tối đa 6 đường để biểu đồ không bị rối!");
-                el.checked = false;
-                return;
-            }
+            // Đã xóa bỏ chặn số lượng đường
             _0xSelectedCharts.push(val);
         }
         updateDropdownLabel();
@@ -396,13 +392,29 @@
             dt.addColumn('number', opt ? opt.n : sel);
         });
 
+        // Object để lưu trữ các giá trị hợp lệ gần nhất (Dùng cho việc lọc giá trị ảo)
+        let lastValidValues = {};
+
         _0xHis.forEach(h => {
             let row = [h.time];
             _0xSelectedCharts.forEach(sel => {
                 let [devID, keyStr] = sel.split('|');
-                let v = (h.data[devID] && h.data[devID][keyStr] !== undefined) ? parseFloat(h.data[devID][keyStr]) : 0;
-                if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
-                if(keyStr === 'air_p') v /= 1000;
+                let v = (h.data[devID] && h.data[devID][keyStr] !== undefined) ? parseFloat(h.data[devID][keyStr]) : null;
+                
+                if (v !== null) {
+                    if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
+                    if(keyStr === 'air_p') v /= 1000;
+
+                    // Bộ lọc thông minh: Xóa bỏ dữ liệu ảo (nhiễu sóng > 100,000 hoặc < -10,000)
+                    if (v > 100000 || v < -10000) {
+                        v = lastValidValues[sel] !== undefined ? lastValidValues[sel] : 0;
+                    } else {
+                        lastValidValues[sel] = v; // Lưu lại giá trị hợp lệ để dùng dự phòng
+                    }
+                } else {
+                    v = lastValidValues[sel] !== undefined ? lastValidValues[sel] : 0;
+                }
+                
                 row.push(v);
             });
             dt.addRow(row);
