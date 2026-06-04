@@ -48,10 +48,19 @@
         .btn_g { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 12px; }
         .btn_g:hover { opacity: 0.8; transform: translateY(-1px); }
         
-        /* Cảnh báo bằng màu sắc cho thiết bị */
         @keyframes alertBlink { 0%, 100% { background-color: #fee2e2; color: #ef4444; } 50% { background-color: transparent; color: #ef4444; } }
         .warn-y { background-color: #fef3c7 !important; color: #d97706 !important; border: 1px solid #fcd34d; }
         .warn-r { animation: alertBlink 1s infinite !important; border: 1px solid #fca5a5; }
+
+        .dd-wrap { position: relative; width: 100%; }
+        .dd-head { padding: 12px; border: 1px solid var(--bo); border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; background: white; user-select: none; }
+        .dd-head:hover { background: #f8fafc; border-color: var(--a); }
+        .dd-list { display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: white; border: 1px solid var(--bo); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 100; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        .dd-list.show { display: block; }
+        .dd-opt { padding: 10px 15px; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 500; cursor: pointer; border-bottom: 1px solid var(--g); margin: 0; transition: background 0.2s; }
+        .dd-opt:last-child { border-bottom: none; }
+        .dd-opt:hover { background: var(--g); }
+        .dd-opt input { cursor: pointer; width: 16px; height: 16px; accent-color: var(--a); margin: 0; }
 
         @media (max-width: 600px) {
             ._x7 { flex-direction: column; text-align: center; }
@@ -118,9 +127,9 @@
 <script>
     let _0xfe1 = !1, _0xae2 = !1, _0xd3c = {}, _0x99b, _0x1a2 = {}, _0x2c3 = {}, _0xEnA = !1, _0xEnG = {}, _0xFL = !1, _0xFLG = {};
     let _0xfa = null, _0xfb = null;
-    let _0xHis = []; // Mảng lưu trữ lịch sử để vẽ biểu đồ
+    let _0xHis = []; // Mảng lưu trữ lịch sử
+    let _0xSelectedCharts = ['FLOW_MA|luuluong', 'EX_NANG_LUONG|air_flow', 'CA/ENE|giatri', 'DP/ENE|giatri', 'CO_NANG_LUONG|air_flow', 'ST_NANG_LUONG|air_flow']; // Mặc định biểu đồ
     
-    // Load thêm gói corechart (cho LineChart) bên cạnh gauge
     google.charts.load('current', {'packages':['gauge', 'corechart']});
     
     window.addEventListener('resize', () => { 
@@ -128,13 +137,45 @@
         _0xae2 && _0x4c5d(); 
         _0xEnA && _0x8f2c(); 
         _0xFL && _0xRenderFL(); 
-        if(_0xfe1) _0xDrawChart(); // Resize biểu đồ khi đổi kích thước màn hình
+        if(_0xfe1) _0xDrawChart(); 
+    });
+
+    // Tự động đóng Menu Sổ Xuống khi click ra ngoài
+    window.addEventListener('click', function(e) {
+        if (!e.target.closest('.dd-wrap')) {
+            const dd = document.getElementById('chart_opts');
+            if(dd) dd.classList.remove('show');
+        }
     });
 
     const _0xCfG = [
         {t:'1. CNG SYSTEM',u:'Nm3/h',l:[{id:'ENG_NANG_LUONG',k:'gt1',n:'CNG ENG'},{id:'EX_NANG_LUONG',k:'cng_flow',n:'CNG EX'},{id:'ST_NANG_LUONG',k:'cng_flow',n:'CNG ST'},{id:'CO_NANG_LUONG',k:'cng_flow',n:'CNG CO'}]},
         {t:'2. WATER SYSTEM',u:'m3/h',l:[{id:'EX_NANG_LUONG',k:'water_flow',n:'WATER EX'},{id:'ST_NANG_LUONG',k:'water_flow',n:'WATER ST'},{id:'CO_NANG_LUONG',k:'water_flow',n:'WATER CO'}]},
         {t:'3. STEAM SYSTEM',u:'kg/h',s:!0,l:[{id:'ENG_NANG_LUONG_STEAM',k:'gt1',n:'STEAM ENG'},{id:'EX_NANG_LUONG',k:'steam_flow',n:'STEAM EX'},{id:'ST_NANG_LUONG',k:'steam_flow',n:'STEAM ST'}]}
+    ];
+
+    const chartOptions = [
+        { v: 'FLOW_MA|luuluong', n: 'FLOW MA AIR' },
+        { v: 'EX_NANG_LUONG|air_flow', n: 'FLOW EX AIR' },
+        { v: 'EX_NANG_LUONG|air_p', n: 'EX AIR PRESSURE' },
+        { v: 'CA/ENE|giatri', n: 'FLOW CA AIR' },
+        { v: 'DP/ENE|giatri', n: 'FLOW DP AIR' },
+        { v: 'CO_NANG_LUONG|air_flow', n: 'FLOW CO AIR' },
+        { v: 'ST_NANG_LUONG|air_flow', n: 'FLOW ST AIR' },
+        { v: 'AFAB1|flow', n: 'FLOW FAB 1 AIR' },
+        { v: 'AFAB2|flow', n: 'FLOW FAB 2 AIR' },
+        { v: 'ACM_MA_1|kw', n: 'ACM MA 1' },
+        { v: 'ACM_MA_2|kw', n: 'ACM MA 2' },
+        { v: 'ACM_MA_3|kw', n: 'ACM MA 3' },
+        { v: 'ACM_MA_4|kw', n: 'ACM MA 4' },
+        { v: 'ACM_MA_5|kw', n: 'ACM MA 5' },
+        { v: 'ACM_MA_6|kw', n: 'ACM MA 6' },
+        { v: 'ACMFAB1/1|kw', n: 'ACMFAB 1.1' },
+        { v: 'ACMFAB1/2|kw', n: 'ACMFAB 1.2' },
+        { v: 'ACMFAB1/3|kw', n: 'ACMFAB 1.3' },
+        { v: 'ACMFAB2/1|kw', n: 'ACMFAB 2.1' },
+        { v: 'ACMFAB2/2|kw', n: 'ACMFAB 2.2' },
+        { v: 'ACMFAB2/3|kw', n: 'ACMFAB 2.3' }
     ];
 
     (function(){const _0xf=["29410c","e6be","884b","f2b7","bb5f","8d8c","b5b3cb","azz","8hs","09","nG4","HauW","@","bVn","MeSR",".s1.eu.","hivemq.cloud","datasend"];const _0xe=(...i)=>i.map(x=>_0xf[x]).join('');window._v9={h:_0xe(0,1,2,3,4,5,6)+_0xe(15,16),p:8884,u:_0xe(7,8,9),pw:_0xe(10,11,12,13,14),t:_0xf[17],id:'W_'+Math.random().toString(16).substr(2,8)}})();
@@ -154,11 +195,12 @@
                 const d=JSON.parse(m.payloadString);
                 for(let k in d){_0xd3c[k]=(typeof d[k]==='object'&&d[k]!==null)?{..._0xd3c[k],...d[k]}:d[k]}
                 
-                // Lưu lịch sử để vẽ biểu đồ
                 let now = new Date();
                 let timeStr = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0') + ":" + now.getSeconds().toString().padStart(2,'0');
                 _0xHis.push({ time: timeStr, data: JSON.parse(JSON.stringify(_0xd3c)) });
-                if(_0xHis.length > 30) _0xHis.shift(); // Giới hạn lưu 30 mốc thời gian gần nhất
+                
+                // TĂNG LÊN 200 ĐIỂM
+                if(_0xHis.length > 200) _0xHis.shift(); 
 
                 _0x2233(); 
                 _0xfe1 && _0x7a8b(); 
@@ -194,7 +236,9 @@
     function _0x00a1(v){_0xfa=v;_0x2233()}
     function _0x00a2(v){_0xfb=v;document.getElementById('power_gauge_v').innerHTML="";_0x4c5d()}
 
-    // SỬA LỖI HIỂN THỊ BUFFER TẠI ĐÂY
+    // Lọc ký tự lỗi UTF-8
+    const cleanStr = (str) => typeof str === 'string' ? str.replace(/[\uFFFD\x00]/g, '') : str;
+
     function _0x2233(){
         const b1=document.getElementById('t_body'),b2=Object.keys(_0xd3c).sort();
         document.getElementById('m_cnt').innerText=b2.length;
@@ -215,11 +259,10 @@
             let s='';
             
             if(typeof d==='object' && d !== null){
-                // Xử lý dịch ngược Buffer
                 if(d.type === 'Buffer' && Array.isArray(d.data)) {
                     try {
                         const decodedText = new TextDecoder('utf-8').decode(new Uint8Array(d.data));
-                        s += `<div class="_x17">Dữ liệu: <b>${decodedText}</b></div>`;
+                        s += `<div class="_x17">Dữ liệu: <b>${cleanStr(decodedText)}</b></div>`;
                     } catch(e) {
                         s += `<div class="_x17">Dữ liệu: <b>[Dữ liệu nhị phân]</b></div>`;
                     }
@@ -227,14 +270,15 @@
                     for(let x in d) {
                         let val = d[x];
                         if(typeof val === 'object' && val !== null) val = JSON.stringify(val);
-                        s += `<div class="_x17">${x}: <b>${val}</b></div>`;
+                        s += `<div class="_x17">${x}: <b>${cleanStr(val)}</b></div>`;
                     }
                 }
             } else {
-                s=`<div class="_x17">Dữ liệu: <b>${d}</b></div>`;
+                s=`<div class="_x17">Dữ liệu: <b>${cleanStr(d)}</b></div>`;
             }
 
-            h+=`<tr><td class="_x15">${v}</td><td><div class="_x16">${s}</div></td></tr>`
+            // Fix tên thiết bị lỗi ký tự đặc biệt
+            h+=`<tr><td class="_x15">${cleanStr(v)}</td><td><div class="_x16">${s}</div></td></tr>`
         });
         b1.innerHTML=h;
     }
@@ -296,36 +340,84 @@
         {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100,yF:91,rF:92},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100,yF:91,rF:92},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100,yF:91,rF:92},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100,yF:91,rF:92},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100,yF:91,rF:92},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100,yF:91,rF:92}]}
     ];
     
-    // Hàm vẽ Biểu đồ đường (Line Chart)
+    // Đổi logic chọn Chart bằng Dropdown
+    function toggleChartCheckbox(val, el) {
+        const idx = _0xSelectedCharts.indexOf(val);
+        if(idx > -1) {
+            _0xSelectedCharts.splice(idx, 1);
+        } else {
+            if(_0xSelectedCharts.length >= 6) {
+                alert("Nên chọn tối đa 6 đường để biểu đồ không bị rối!");
+                el.checked = false;
+                return;
+            }
+            _0xSelectedCharts.push(val);
+        }
+        updateDropdownLabel();
+        _0xDrawChart();
+    }
+
+    function renderChartDropdown() {
+        const container = document.getElementById('chart_opts');
+        if(!container) return;
+        let html = '';
+        chartOptions.forEach(opt => {
+            const isActive = _0xSelectedCharts.includes(opt.v);
+            html += `<label class="dd-opt">
+                        <input type="checkbox" value="${opt.v}" ${isActive ? 'checked' : ''} onchange="toggleChartCheckbox('${opt.v}', this)">
+                        ${opt.n}
+                     </label>`;
+        });
+        container.innerHTML = html;
+        updateDropdownLabel();
+    }
+
+    function updateDropdownLabel() {
+        const lbl = document.getElementById('dd_label');
+        if(lbl) {
+            lbl.innerText = _0xSelectedCharts.length > 0 ? `Đã chọn ${_0xSelectedCharts.length} thông số` : 'Chọn thông số...';
+        }
+    }
+
     function _0xDrawChart() {
         if(!document.getElementById('acm_line_chart') || typeof google.visualization.LineChart === 'undefined') return;
-        
-        const sel = document.getElementById('chartSelect').value;
-        const [devID, keyStr] = sel.split('|');
-        const selText = document.getElementById('chartSelect').options[document.getElementById('chartSelect').selectedIndex].text;
+
+        if(_0xSelectedCharts.length === 0) {
+            document.getElementById('acm_line_chart').innerHTML = '<div style="padding: 100px 0; text-align: center; color: var(--t2); font-weight: 500;">Vui lòng chọn ít nhất 1 thông số ở trên để vẽ biểu đồ</div>';
+            return;
+        }
 
         let dt = new google.visualization.DataTable();
         dt.addColumn('string', 'Thời gian');
-        dt.addColumn('number', 'Giá trị');
+        
+        // Thêm cột cho mỗi thông số được chọn
+        _0xSelectedCharts.forEach(sel => {
+            let opt = chartOptions.find(o => o.v === sel);
+            dt.addColumn('number', opt ? opt.n : sel);
+        });
 
         _0xHis.forEach(h => {
-            let v = (h.data[devID] && h.data[devID][keyStr] !== undefined) ? parseFloat(h.data[devID][keyStr]) : 0;
-            if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
-            if(keyStr === 'air_p') v /= 1000;
-            dt.addRow([h.time, v]);
+            let row = [h.time];
+            _0xSelectedCharts.forEach(sel => {
+                let [devID, keyStr] = sel.split('|');
+                let v = (h.data[devID] && h.data[devID][keyStr] !== undefined) ? parseFloat(h.data[devID][keyStr]) : 0;
+                if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
+                if(keyStr === 'air_p') v /= 1000;
+                row.push(v);
+            });
+            dt.addRow(row);
         });
 
         let options = {
-            title: 'Biểu đồ thời gian thực: ' + selText,
-            titleTextStyle: { color: '#0284c7', fontSize: 14, bold: true },
+            title: 'Dữ liệu thời gian thực',
+            titleTextStyle: { color: '#0284c7', fontSize: 13, bold: true },
             curveType: 'function',
-            legend: { position: 'none' },
-            colors: ['#0284c7'],
-            chartArea: { width: '85%', height: '65%' },
-            hAxis: { textStyle: { fontSize: 10, color: '#64748b' } },
+            legend: { position: 'top', textStyle: {fontSize: 11, color: '#475569'} },
+            chartArea: { width: '88%', height: '70%' },
+            hAxis: { textStyle: { fontSize: 10, color: '#64748b' }, showTextEvery: Math.ceil(_0xHis.length/10) },
             vAxis: { minValue: 0, textStyle: { fontSize: 11, color: '#1e293b' } },
-            lineWidth: 3,
-            animation: { duration: 500, easing: 'out' }
+            lineWidth: 2,
+            animation: { duration: 0 } // Tắt animation để vẽ 200 điểm không bị lag
         };
 
         let chart = new google.visualization.LineChart(document.getElementById('acm_line_chart'));
@@ -337,34 +429,36 @@
         const g1=document.getElementById('gauge_v');
         if(g1.innerHTML===""){
             let h='';
-            // Render Gauge 1 -> 4
             _0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{
                 const uid=(g4.id+'_'+g4.k).replace(/[^a-zA-Z0-9]/g,'_');
                 h+=`<div class="g_card"><div id="c_${uid}"></div><div id="t_${uid}" style="font-weight:700; color:var(--a); font-size:12px; margin-top:8px; padding:4px 8px; border-radius:6px; transition:0.3s; text-align:center; min-width:100px;">${g4.n}</div></div>`
             })});
             
-            // Render Mục số 5: Line Chart
             h += `
             <div class="g_title" style="grid-column: 1 / -1; margin-top: 30px;">5. BIỂU ĐỒ XU HƯỚNG (LINE CHART)</div>
-            <div style="grid-column: 1 / -1; background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--bo); display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <select id="chartSelect" onchange="_0xDrawChart()" class="_x3" style="max-width: 400px; margin-bottom: 20px; font-weight: 600; color: var(--a);">
-                    <option value="FLOW_MA|luuluong" selected>2. Lưu lượng Hệ thống MA (Nm³/h)</option>
-                    <option value="EX_NANG_LUONG|air_flow">2. Lưu lượng EX AIR (Nm³/h)</option>
-                    <option value="AFAB1|flow">3. Lưu lượng FAB 1 AIR (Nm³/h)</option>
-                    <option value="AFAB2|flow">3. Lưu lượng FAB 2 AIR (Nm³/h)</option>
-                    <option value="ACM_MA_1|kw">1. Công suất ACM MA 1 (kW)</option>
-                    <option value="ACM_MA_2|kw">1. Công suất ACM MA 2 (kW)</option>
-                    <option value="ACM_MA_3|kw">1. Công suất ACM MA 3 (kW)</option>
-                    <option value="ACMFAB1/1|kw">4. Công suất ACMFAB 1.1 (kW)</option>
-                    <option value="ACMFAB2/1|kw">4. Công suất ACMFAB 2.1 (kW)</option>
-                </select>
-                <div id="acm_line_chart" style="width: 100%; height: 350px;"></div>
+            <div style="grid-column: 1 / -1; background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="width: 300px; position: relative; z-index: 101;">
+                        <div class="dd-wrap">
+                            <div class="dd-head" onclick="document.getElementById('chart_opts').classList.toggle('show')">
+                                <span id="dd_label">Đã chọn 1 thông số</span>
+                                <span style="font-size: 10px;">▼</span>
+                            </div>
+                            <div id="chart_opts" class="dd-list">
+                                <!-- Checkboxes -->
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;">
+                        <div id="acm_line_chart" style="width: 100%; height: 350px;"></div>
+                    </div>
+                </div>
             </div>`;
             
-            g1.innerHTML=h
+            g1.innerHTML=h;
+            renderChartDropdown();
         }
         
-        // Vẽ lại Data cho đồng hồ kim (Gauge)
         _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
             const uid=(g7.id+'_'+g7.k).replace(/[^a-zA-Z0-9]/g,'_');
             const el=document.getElementById(`c_${uid}`);if(!el)return;
@@ -394,7 +488,6 @@
             _0x1a2[uid].draw(dt,{width:150,height:150,redFrom:rFrom,redTo:g7.m,yellowFrom:yFrom,yellowTo:yTo,max:g7.m})
         })})
         
-        // Cập nhật biểu đồ đường
         _0xDrawChart();
     }
 
