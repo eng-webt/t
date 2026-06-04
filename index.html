@@ -35,7 +35,7 @@
         ._x15 { font-weight: 600; font-size: 15px; color: var(--t1); }
         ._x16 { display: flex; flex-wrap: wrap; gap: 8px; }
         ._x17 { background: #ffffff; padding: 5px 12px; border-radius: 8px; border: 1px solid var(--bo); font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        ._x17 b { color: var(--a); margin-left: 4px; font-family: 'Times New Roman', serif; font-size: 18px; }
+        ._x17 b { color: var(--a); margin-left: 4px; font-family: 'Times New Roman', serif; font-size: 18px; word-break: break-word; }
         .st { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; }
         .on { background: #d1fae5; color: var(--s); }
         .off { background: #fee2e2; color: var(--d); }
@@ -118,18 +118,32 @@
 <script>
     let _0xfe1 = !1, _0xae2 = !1, _0xd3c = {}, _0x99b, _0x1a2 = {}, _0x2c3 = {}, _0xEnA = !1, _0xEnG = {}, _0xFL = !1, _0xFLG = {};
     let _0xfa = null, _0xfb = null;
-    window.addEventListener('resize', () => { _0xfe1 && _0x7a8b(); _0xae2 && _0x4c5d(); _0xEnA && _0x8f2c(); _0xFL && _0xRenderFL(); });
-    google.charts.load('current', {'packages':['gauge']});
+    let _0xHis = []; // Mảng lưu trữ lịch sử để vẽ biểu đồ
+    
+    // Load thêm gói corechart (cho LineChart) bên cạnh gauge
+    google.charts.load('current', {'packages':['gauge', 'corechart']});
+    
+    window.addEventListener('resize', () => { 
+        _0xfe1 && _0x7a8b(); 
+        _0xae2 && _0x4c5d(); 
+        _0xEnA && _0x8f2c(); 
+        _0xFL && _0xRenderFL(); 
+        if(_0xfe1) _0xDrawChart(); // Resize biểu đồ khi đổi kích thước màn hình
+    });
+
     const _0xCfG = [
         {t:'1. CNG SYSTEM',u:'Nm3/h',l:[{id:'ENG_NANG_LUONG',k:'gt1',n:'CNG ENG'},{id:'EX_NANG_LUONG',k:'cng_flow',n:'CNG EX'},{id:'ST_NANG_LUONG',k:'cng_flow',n:'CNG ST'},{id:'CO_NANG_LUONG',k:'cng_flow',n:'CNG CO'}]},
         {t:'2. WATER SYSTEM',u:'m3/h',l:[{id:'EX_NANG_LUONG',k:'water_flow',n:'WATER EX'},{id:'ST_NANG_LUONG',k:'water_flow',n:'WATER ST'},{id:'CO_NANG_LUONG',k:'water_flow',n:'WATER CO'}]},
         {t:'3. STEAM SYSTEM',u:'kg/h',s:!0,l:[{id:'ENG_NANG_LUONG_STEAM',k:'gt1',n:'STEAM ENG'},{id:'EX_NANG_LUONG',k:'steam_flow',n:'STEAM EX'},{id:'ST_NANG_LUONG',k:'steam_flow',n:'STEAM ST'}]}
     ];
+
     (function(){const _0xf=["29410c","e6be","884b","f2b7","bb5f","8d8c","b5b3cb","azz","8hs","09","nG4","HauW","@","bVn","MeSR",".s1.eu.","hivemq.cloud","datasend"];const _0xe=(...i)=>i.map(x=>_0xf[x]).join('');window._v9={h:_0xe(0,1,2,3,4,5,6)+_0xe(15,16),p:8884,u:_0xe(7,8,9),pw:_0xe(10,11,12,13,14),t:_0xf[17],id:'W_'+Math.random().toString(16).substr(2,8)}})();
+
     function _0x4a1b(){const _0xa1=document.getElementById('u_in').value,_0xa2=document.getElementById('p_in').value;if(btoa(_0xa1)==='YWRtaW4='&&btoa(_0xa2)==='dGFt'){localStorage.setItem('_auth',btoa('valid_user'));_0x5f32()}else{document.getElementById('l_err').style.display='block'}}
     function _0x5f32(){document.getElementById('l_scr').style.display='none';document.getElementById('d_scr').style.display='block';_0x1122()}
     function _0x9ef2(){localStorage.removeItem('_auth');location.reload()}
     window.onload=()=>{localStorage.getItem('_auth')&&_0x5f32()};
+
     function _0x1122(){
         if(_0x99b){try{_0x99b.disconnect()}catch(e){}}
         _0x99b=new Paho.MQTT.Client(_v9.h,_v9.p,_v9.id);
@@ -139,7 +153,18 @@
                 if(!m.payloadString||!m.payloadString.trim())return;
                 const d=JSON.parse(m.payloadString);
                 for(let k in d){_0xd3c[k]=(typeof d[k]==='object'&&d[k]!==null)?{..._0xd3c[k],...d[k]}:d[k]}
-                _0x2233(); _0xfe1 && _0x7a8b(); _0xEnA && _0x8f2c(); _0xae2 && _0xUpdV(); _0xFL && _0xRenderFL();
+                
+                // Lưu lịch sử để vẽ biểu đồ
+                let now = new Date();
+                let timeStr = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0') + ":" + now.getSeconds().toString().padStart(2,'0');
+                _0xHis.push({ time: timeStr, data: JSON.parse(JSON.stringify(_0xd3c)) });
+                if(_0xHis.length > 30) _0xHis.shift(); // Giới hạn lưu 30 mốc thời gian gần nhất
+
+                _0x2233(); 
+                _0xfe1 && _0x7a8b(); 
+                _0xEnA && _0x8f2c(); 
+                _0xae2 && _0xUpdV(); 
+                _0xFL && _0xRenderFL();
             }catch(e){}
         };
         _0x99b.connect({useSSL:!0,userName:_v9.u,password:_v9.pw,onSuccess:()=>{
@@ -153,6 +178,7 @@
         },onFailure:()=>setTimeout(_0x1122,5000)})
     }
     setInterval(()=>{if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}},30000);
+    
     function _0xUpdV(){
         if(typeof google==='undefined'||!google.visualization)return;
         Object.keys(_0x2c3).forEach(id=>{
@@ -164,8 +190,11 @@
             }
         });
     }
+
     function _0x00a1(v){_0xfa=v;_0x2233()}
     function _0x00a2(v){_0xfb=v;document.getElementById('power_gauge_v').innerHTML="";_0x4c5d()}
+
+    // SỬA LỖI HIỂN THỊ BUFFER TẠI ĐÂY
     function _0x2233(){
         const b1=document.getElementById('t_body'),b2=Object.keys(_0xd3c).sort();
         document.getElementById('m_cnt').innerText=b2.length;
@@ -184,11 +213,32 @@
             if(k!==ls){h+=`<tr class="_x13"><td colspan="2">KHU VỰC: ${k}<span class="_x14">${b3[k]} Thiết bị</span></td></tr>`;ls=k}
             const d=_0xd3c[v];
             let s='';
-            if(typeof d==='object'){for(let x in d)s+=`<div class="_x17">${x}: <b>${d[x]}</b></div>`}else s=`<div class="_x17">Dữ liệu: <b>${d}</b></div>`;
+            
+            if(typeof d==='object' && d !== null){
+                // Xử lý dịch ngược Buffer
+                if(d.type === 'Buffer' && Array.isArray(d.data)) {
+                    try {
+                        const decodedText = new TextDecoder('utf-8').decode(new Uint8Array(d.data));
+                        s += `<div class="_x17">Dữ liệu: <b>${decodedText}</b></div>`;
+                    } catch(e) {
+                        s += `<div class="_x17">Dữ liệu: <b>[Dữ liệu nhị phân]</b></div>`;
+                    }
+                } else {
+                    for(let x in d) {
+                        let val = d[x];
+                        if(typeof val === 'object' && val !== null) val = JSON.stringify(val);
+                        s += `<div class="_x17">${x}: <b>${val}</b></div>`;
+                    }
+                }
+            } else {
+                s=`<div class="_x17">Dữ liệu: <b>${d}</b></div>`;
+            }
+
             h+=`<tr><td class="_x15">${v}</td><td><div class="_x16">${s}</div></td></tr>`
         });
         b1.innerHTML=h;
     }
+
     function _0x91a2(){
         const a=_0xfe1,b=_0xae2,c=_0xEnA,d=_0xFL;
         document.getElementById('table_v').style.display=(a||b||c||d)?'none':'block';
@@ -202,10 +252,12 @@
         document.getElementById('btn_eg').innerText=c?'XEM BẢNG':'ENERGY GAUGE';
         document.getElementById('btn_fl').innerText=d?'XEM BẢNG':'FORKLIFT GAUGE';
     }
+
     function _0x7c22(){_0xfe1=!_0xfe1;_0xae2=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xfe1){document.getElementById('gauge_v').innerHTML="";_0x1a2={};_0x7a8b()}}
     function _0xbb41(){_0xae2=!_0xae2;_0xfe1=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}}
     function _0x9e1a(){_0xEnA=!_0xEnA;_0xfe1=!1;_0xae2=!1;_0xFL=!1;_0x91a2();if(_0xEnA){document.getElementById('energy_gauge_v').innerHTML="";_0xEnG={};_0x8f2c()}}
     function _0xForklift(){_0xFL=!_0xFL;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;_0x91a2();if(_0xFL){document.getElementById('forklift_gauge_v').innerHTML="";_0xFLG={};_0xRenderFL()}}
+
     function _0x4c5d(){
         const h1=document.getElementById('power_gauge_v');if(!h1||!_0xae2)return;
         const m={"ENG/ACP-UB-1/1":"Máy lạnh phòng cân","ENG/ACP-UB-1/2":"Máy lạnh văn phòng số 4","ENG/ACP-UB-1/3":"Máy lạnh văn phòng số 3","ENG/ACP-UB-1/4":"Máy lạnh văn phòng số 2","ENG/ACP-UB-1/5":"Máy lạnh văn phòng số 1","ENG/ACP-UB-1/6":"Máy lạnh phòng họp số 3","ENG/ACP-UB-1/7":"Máy lạnh phòng họp số 2","ENG/ACP-UB-1/8":"Máy lạnh phòng họp số 1","ENG/ACP-UB-1/9":"Tổng máy lạnh VP ENG","ENG/WSP-CP-MA-1":"Nước cấp MA1","ENG/WSP-CP-MA-2":"Nước cấp MA2","ENG/ACP-UB-2":"Tủ Septic Tank, Quạt cấp, Máy Lạnh P.Điện","ENG/LP-UB-2":"Đèn ổ cắm văn phòng","ENG/LP-SS":"Substation","ENG/LP-DP":"Máy lạnh Diesel","ENG/LP-WS":"Workshop2-Traning","ENG/LP-UB-1":"Workshop1","ENG/BWP-CP-1":"Bơm lọc cát"};
@@ -244,24 +296,82 @@
         {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100,yF:91,rF:92},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100,yF:91,rF:92},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100,yF:91,rF:92},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100,yF:91,rF:92},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100,yF:91,rF:92},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100,yF:91,rF:92}]}
     ];
     
+    // Hàm vẽ Biểu đồ đường (Line Chart)
+    function _0xDrawChart() {
+        if(!document.getElementById('acm_line_chart') || typeof google.visualization.LineChart === 'undefined') return;
+        
+        const sel = document.getElementById('chartSelect').value;
+        const [devID, keyStr] = sel.split('|');
+        const selText = document.getElementById('chartSelect').options[document.getElementById('chartSelect').selectedIndex].text;
+
+        let dt = new google.visualization.DataTable();
+        dt.addColumn('string', 'Thời gian');
+        dt.addColumn('number', 'Giá trị');
+
+        _0xHis.forEach(h => {
+            let v = (h.data[devID] && h.data[devID][keyStr] !== undefined) ? parseFloat(h.data[devID][keyStr]) : 0;
+            if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
+            if(keyStr === 'air_p') v /= 1000;
+            dt.addRow([h.time, v]);
+        });
+
+        let options = {
+            title: 'Biểu đồ thời gian thực: ' + selText,
+            titleTextStyle: { color: '#0284c7', fontSize: 14, bold: true },
+            curveType: 'function',
+            legend: { position: 'none' },
+            colors: ['#0284c7'],
+            chartArea: { width: '85%', height: '65%' },
+            hAxis: { textStyle: { fontSize: 10, color: '#64748b' } },
+            vAxis: { minValue: 0, textStyle: { fontSize: 11, color: '#1e293b' } },
+            lineWidth: 3,
+            animation: { duration: 500, easing: 'out' }
+        };
+
+        let chart = new google.visualization.LineChart(document.getElementById('acm_line_chart'));
+        chart.draw(dt, options);
+    }
+
     function _0x7a8b(){
         if(typeof google==='undefined'||!google.visualization)return;
         const g1=document.getElementById('gauge_v');
         if(g1.innerHTML===""){
-            let h='';_0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{
+            let h='';
+            // Render Gauge 1 -> 4
+            _0xff0.forEach(g3=>{h+=`<div class="g_title">${g3.t}</div>`;g3.l.forEach(g4=>{
                 const uid=(g4.id+'_'+g4.k).replace(/[^a-zA-Z0-9]/g,'_');
-                // Thêm ID cho thẻ tên để xử lý hiển thị cảnh báo, kèm hiển thị cả chỉ số
                 h+=`<div class="g_card"><div id="c_${uid}"></div><div id="t_${uid}" style="font-weight:700; color:var(--a); font-size:12px; margin-top:8px; padding:4px 8px; border-radius:6px; transition:0.3s; text-align:center; min-width:100px;">${g4.n}</div></div>`
             })});
+            
+            // Render Mục số 5: Line Chart
+            h += `
+            <div class="g_title" style="grid-column: 1 / -1; margin-top: 30px;">5. BIỂU ĐỒ XU HƯỚNG (LINE CHART)</div>
+            <div style="grid-column: 1 / -1; background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--bo); display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <select id="chartSelect" onchange="_0xDrawChart()" class="_x3" style="max-width: 400px; margin-bottom: 20px; font-weight: 600; color: var(--a);">
+                    <option value="FLOW_MA|luuluong" selected>2. Lưu lượng Hệ thống MA (Nm³/h)</option>
+                    <option value="EX_NANG_LUONG|air_flow">2. Lưu lượng EX AIR (Nm³/h)</option>
+                    <option value="AFAB1|flow">3. Lưu lượng FAB 1 AIR (Nm³/h)</option>
+                    <option value="AFAB2|flow">3. Lưu lượng FAB 2 AIR (Nm³/h)</option>
+                    <option value="ACM_MA_1|kw">1. Công suất ACM MA 1 (kW)</option>
+                    <option value="ACM_MA_2|kw">1. Công suất ACM MA 2 (kW)</option>
+                    <option value="ACM_MA_3|kw">1. Công suất ACM MA 3 (kW)</option>
+                    <option value="ACMFAB1/1|kw">4. Công suất ACMFAB 1.1 (kW)</option>
+                    <option value="ACMFAB2/1|kw">4. Công suất ACMFAB 2.1 (kW)</option>
+                </select>
+                <div id="acm_line_chart" style="width: 100%; height: 350px;"></div>
+            </div>`;
+            
             g1.innerHTML=h
         }
+        
+        // Vẽ lại Data cho đồng hồ kim (Gauge)
         _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
             const uid=(g7.id+'_'+g7.k).replace(/[^a-zA-Z0-9]/g,'_');
             const el=document.getElementById(`c_${uid}`);if(!el)return;
             
             let v=(_0xd3c[g7.id]&&_0xd3c[g7.id][g7.k]!==undefined)?parseFloat(_0xd3c[g7.id][g7.k]):0;
             if(g7.id==='AFAB1'||g7.id==='AFAB2') v/=10;
-            if(g7.k==='air_p') v/=1000; // Xử lý chia 1000 cho áp suất khí EX
+            if(g7.k==='air_p') v/=1000; 
             
             let dt=google.visualization.arrayToDataTable([['Label','Value'],[g7.u||g6.u,parseFloat(v.toFixed(1))]]);
             if(!_0x1a2[uid])_0x1a2[uid]=new google.visualization.Gauge(el);
@@ -270,12 +380,10 @@
             let yTo   = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
             let rFrom = g7.rF !== undefined ? g7.rF : g7.m * 0.8;
 
-            // Xử lý đổi màu nhấp nháy cho thẻ tên nằm dưới đồng hồ
             const tEl = document.getElementById(`t_${uid}`);
             if(tEl) {
-                // Trả lại tên hiển thị như bình thường, không kèm giá trị số
                 tEl.innerText = g7.n;
-                tEl.className = ''; // Xóa cảnh báo cũ
+                tEl.className = ''; 
                 if(v >= rFrom) {
                     tEl.classList.add('warn-r');
                 } else if(v >= yFrom) {
@@ -285,7 +393,11 @@
 
             _0x1a2[uid].draw(dt,{width:150,height:150,redFrom:rFrom,redTo:g7.m,yellowFrom:yFrom,yellowTo:yTo,max:g7.m})
         })})
+        
+        // Cập nhật biểu đồ đường
+        _0xDrawChart();
     }
+
     function _0x8f2c(){
         if(typeof google==='undefined'||!google.visualization)return;
         const c=document.getElementById('energy_gauge_v');if(!c||!_0xEnA)return;
@@ -302,6 +414,7 @@
             _0xEnG[uid].draw(dt,{width:150,height:150,max:mx,redFrom:mx*0.9,redTo:mx,yellowFrom:mx*0.75,yellowTo:mx*0.9})
         })})
     }
+    
     function _0xRenderFL(){
         if(typeof google==='undefined'||!google.visualization)return;
         const c=document.getElementById('forklift_gauge_v');if(!c||!_0xFL)return;
