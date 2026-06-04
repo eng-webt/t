@@ -53,7 +53,7 @@
         .warn-r { animation: alertBlink 1s infinite !important; border: 1px solid #fca5a5; }
 
         .dd-wrap { position: relative; width: 100%; }
-        .dd-head { padding: 12px; border: 1px solid var(--bo); border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; background: white; user-select: none; }
+        .dd-head { padding: 6px 12px; border: 1px solid var(--bo); border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; background: white; user-select: none; }
         .dd-head:hover { background: #f8fafc; border-color: var(--a); }
         .dd-list { display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: white; border: 1px solid var(--bo); border-radius: 8px; max-height: 280px; overflow-y: auto; z-index: 100; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
         .dd-list.show { display: block; }
@@ -61,6 +61,11 @@
         .dd-opt:last-child { border-bottom: none; }
         .dd-opt:hover { background: var(--g); }
         .dd-opt input { cursor: pointer; width: 16px; height: 16px; accent-color: var(--a); margin: 0; }
+
+        /* Styles cho Button Controls Biểu đồ */
+        .chart-btn { background: #f8fafc; border: 1px solid var(--bo); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--t2); cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+        .chart-btn:hover { background: var(--a); color: white; border-color: var(--a); }
+        .fullscreen-active { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; border-radius: 0 !important; margin: 0 !important; overflow-y: auto; background: white !important; }
 
         @media (max-width: 600px) {
             ._x7 { flex-direction: column; text-align: center; }
@@ -128,7 +133,10 @@
     let _0xfe1 = !1, _0xae2 = !1, _0xd3c = {}, _0x99b, _0x1a2 = {}, _0x2c3 = {}, _0xEnA = !1, _0xEnG = {}, _0xFL = !1, _0xFLG = {};
     let _0xfa = null, _0xfb = null;
     let _0xHis = []; // Mảng lưu trữ lịch sử
-    let _0xSelectedCharts = ['FLOW_MA|luuluong', 'EX_NANG_LUONG|air_flow', 'CA/ENE|giatri', 'DP/ENE|giatri', 'CO_NANG_LUONG|air_flow', 'ST_NANG_LUONG|air_flow']; // Mặc định biểu đồ
+    let _0xIsPaused = false; 
+    let _0xLastChartUpdate = 0; // Biến kiểm soát thời gian cập nhật biểu đồ 15s
+    let _0xLineChartObj = null; // Biến chứa instance của Chart, tái sử dụng chống rò rỉ RAM
+    let _0xSelectedCharts = ['FLOW_MA|luuluong', 'EX_NANG_LUONG|air_flow', 'CA/ENE|giatri', 'DP/ENE|giatri', 'CO_NANG_LUONG|air_flow', 'ST_NANG_LUONG|air_flow']; 
     
     google.charts.load('current', {'packages':['gauge', 'corechart']});
     
@@ -140,7 +148,20 @@
         if(_0xfe1) _0xDrawChart(); 
     });
 
-    // Tự động đóng Menu Sổ Xuống khi click ra ngoài
+    ['fullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange'].forEach(evt => 
+        document.addEventListener(evt, () => {
+            const chartWrap = document.getElementById('chart_container_wrapper');
+            if (chartWrap) {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                    chartWrap.classList.add('fullscreen-active');
+                } else {
+                    chartWrap.classList.remove('fullscreen-active');
+                }
+                setTimeout(_0xDrawChart, 200); 
+            }
+        })
+    );
+
     window.addEventListener('click', function(e) {
         if (!e.target.closest('.dd-wrap')) {
             const dd = document.getElementById('chart_opts');
@@ -195,12 +216,18 @@
                 const d=JSON.parse(m.payloadString);
                 for(let k in d){_0xd3c[k]=(typeof d[k]==='object'&&d[k]!==null)?{..._0xd3c[k],...d[k]}:d[k]}
                 
-                let now = new Date();
-                let timeStr = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0') + ":" + now.getSeconds().toString().padStart(2,'0');
-                _0xHis.push({ time: timeStr, data: JSON.parse(JSON.stringify(_0xd3c)) });
-                
-                // TĂNG LÊN 200 ĐIỂM
-                if(_0xHis.length > 200) _0xHis.shift(); 
+                let currentMillis = Date.now();
+                // Thu thập mẫu 15 giây / lần để tránh treo lag CPU
+                if(!_0xIsPaused) {
+                    if (currentMillis - _0xLastChartUpdate >= 15000) {
+                        _0xLastChartUpdate = currentMillis;
+                        let now = new Date();
+                        let timeStr = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0') + ":" + now.getSeconds().toString().padStart(2,'0');
+                        _0xHis.push({ time: timeStr, data: JSON.parse(JSON.stringify(_0xd3c)) });
+                        if(_0xHis.length > 200) _0xHis.shift(); 
+                        if(_0xfe1) _0xDrawChart(); 
+                    }
+                }
 
                 _0x2233(); 
                 _0xfe1 && _0x7a8b(); 
@@ -236,7 +263,6 @@
     function _0x00a1(v){_0xfa=v;_0x2233()}
     function _0x00a2(v){_0xfb=v;document.getElementById('power_gauge_v').innerHTML="";_0x4c5d()}
 
-    // Lọc ký tự lỗi UTF-8
     const cleanStr = (str) => typeof str === 'string' ? str.replace(/[\uFFFD\x00]/g, '') : str;
 
     function _0x2233(){
@@ -276,8 +302,6 @@
             } else {
                 s=`<div class="_x17">Dữ liệu: <b>${cleanStr(d)}</b></div>`;
             }
-
-            // Fix tên thiết bị lỗi ký tự đặc biệt
             h+=`<tr><td class="_x15">${cleanStr(v)}</td><td><div class="_x16">${s}</div></td></tr>`
         });
         b1.innerHTML=h;
@@ -297,7 +321,13 @@
         document.getElementById('btn_fl').innerText=d?'XEM BẢNG':'FORKLIFT GAUGE';
     }
 
-    function _0x7c22(){_0xfe1=!_0xfe1;_0xae2=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xfe1){document.getElementById('gauge_v').innerHTML="";_0x1a2={};_0x7a8b()}}
+    function _0x7c22(){
+        _0xfe1=!_0xfe1;_0xae2=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();
+        if(_0xfe1){
+            document.getElementById('gauge_v').innerHTML="";_0x1a2={};
+            _0x7a8b(); 
+        }
+    }
     function _0xbb41(){_0xae2=!_0xae2;_0xfe1=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();if(_0xae2){document.getElementById('power_gauge_v').innerHTML="";_0x2c3={};_0x4c5d()}}
     function _0x9e1a(){_0xEnA=!_0xEnA;_0xfe1=!1;_0xae2=!1;_0xFL=!1;_0x91a2();if(_0xEnA){document.getElementById('energy_gauge_v').innerHTML="";_0xEnG={};_0x8f2c()}}
     function _0xForklift(){_0xFL=!_0xFL;_0xfe1=!1;_0xae2=!1;_0xEnA=!1;_0x91a2();if(_0xFL){document.getElementById('forklift_gauge_v').innerHTML="";_0xFLG={};_0xRenderFL()}}
@@ -340,13 +370,50 @@
         {t:'4. Công suất Máy Nén Khí FAB (kW)',u:'kW',l:[{id:'ACMFAB1/1',k:'kw',n:'ACMFAB 1.1',m:100,yF:91,rF:92},{id:'ACMFAB1/2',k:'kw',n:'ACMFAB 1.2',m:100,yF:91,rF:92},{id:'ACMFAB1/3',k:'kw',n:'ACMFAB 1.3',m:100,yF:91,rF:92},{id:'ACMFAB2/1',k:'kw',n:'ACMFAB 2.1',m:100,yF:91,rF:92},{id:'ACMFAB2/2',k:'kw',n:'ACMFAB 2.2',m:100,yF:91,rF:92},{id:'ACMFAB2/3',k:'kw',n:'ACMFAB 2.3',m:100,yF:91,rF:92}]}
     ];
     
-    // Đổi logic chọn Chart bằng Dropdown
+    function togglePauseChart() {
+        _0xIsPaused = !_0xIsPaused;
+        const btn = document.getElementById('btn_pause_chart');
+        if (btn) {
+            if (_0xIsPaused) {
+                btn.innerHTML = '▶ Tiếp tục';
+                btn.style.backgroundColor = '#fef08a';
+                btn.style.color = '#854d0e';
+                btn.style.borderColor = '#fde047';
+            } else {
+                btn.innerHTML = '⏸ Dừng';
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+                btn.style.borderColor = '';
+            }
+        }
+    }
+
+    function toggleFullscreenChart() {
+        const chartWrap = document.getElementById('chart_container_wrapper');
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            if (chartWrap.requestFullscreen) {
+                chartWrap.requestFullscreen();
+            } else if (chartWrap.webkitRequestFullscreen) {
+                chartWrap.webkitRequestFullscreen();
+            } else if (chartWrap.msRequestFullscreen) {
+                chartWrap.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
+
     function toggleChartCheckbox(val, el) {
         const idx = _0xSelectedCharts.indexOf(val);
         if(idx > -1) {
             _0xSelectedCharts.splice(idx, 1);
         } else {
-            // Đã xóa bỏ chặn số lượng đường
             _0xSelectedCharts.push(val);
         }
         updateDropdownLabel();
@@ -376,23 +443,23 @@
     }
 
     function _0xDrawChart() {
-        if(!document.getElementById('acm_line_chart') || typeof google.visualization.LineChart === 'undefined') return;
+        const chartDiv = document.getElementById('acm_line_chart');
+        if(!chartDiv || typeof google.visualization.LineChart === 'undefined') return;
 
         if(_0xSelectedCharts.length === 0) {
-            document.getElementById('acm_line_chart').innerHTML = '<div style="padding: 100px 0; text-align: center; color: var(--t2); font-weight: 500;">Vui lòng chọn ít nhất 1 thông số ở trên để vẽ biểu đồ</div>';
+            chartDiv.innerHTML = '<div style="padding: 100px 0; text-align: center; color: var(--t2); font-weight: 500;">Vui lòng chọn ít nhất 1 thông số ở trên để vẽ biểu đồ</div>';
+            _0xLineChartObj = null; // Trả về null để tạo mới lại khi có thông số
             return;
         }
 
         let dt = new google.visualization.DataTable();
         dt.addColumn('string', 'Thời gian');
         
-        // Thêm cột cho mỗi thông số được chọn
         _0xSelectedCharts.forEach(sel => {
             let opt = chartOptions.find(o => o.v === sel);
             dt.addColumn('number', opt ? opt.n : sel);
         });
 
-        // Object để lưu trữ các giá trị hợp lệ gần nhất (Dùng cho việc lọc giá trị ảo)
         let lastValidValues = {};
 
         _0xHis.forEach(h => {
@@ -405,11 +472,11 @@
                     if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
                     if(keyStr === 'air_p') v /= 1000;
 
-                    // Bộ lọc thông minh: Xóa bỏ dữ liệu ảo (nhiễu sóng > 100,000 hoặc < -10,000)
-                    if (v > 100000 || v < -10000) {
+                    // Bộ lọc 30.000: Bất kỳ giá trị nào nhảy lên > 30,000 hoặc quá âm (< -1000) sẽ bị gạch bỏ và lấy giá trị cũ bù vào
+                    if (v > 30000 || v < -1000) {
                         v = lastValidValues[sel] !== undefined ? lastValidValues[sel] : 0;
                     } else {
-                        lastValidValues[sel] = v; // Lưu lại giá trị hợp lệ để dùng dự phòng
+                        lastValidValues[sel] = v;
                     }
                 } else {
                     v = lastValidValues[sel] !== undefined ? lastValidValues[sel] : 0;
@@ -425,15 +492,18 @@
             titleTextStyle: { color: '#0284c7', fontSize: 13, bold: true },
             curveType: 'function',
             legend: { position: 'top', textStyle: {fontSize: 11, color: '#475569'} },
-            chartArea: { width: '88%', height: '70%' },
+            chartArea: { width: '90%', height: '70%' },
             hAxis: { textStyle: { fontSize: 10, color: '#64748b' }, showTextEvery: Math.ceil(_0xHis.length/10) },
             vAxis: { minValue: 0, textStyle: { fontSize: 11, color: '#1e293b' } },
             lineWidth: 2,
-            animation: { duration: 0 } // Tắt animation để vẽ 200 điểm không bị lag
+            animation: { duration: 0 } 
         };
 
-        let chart = new google.visualization.LineChart(document.getElementById('acm_line_chart'));
-        chart.draw(dt, options);
+        // Reuse chart object để chống rò rỉ RAM (Memory Leak) khi để treo lâu
+        if (!_0xLineChartObj) {
+            _0xLineChartObj = new google.visualization.LineChart(chartDiv);
+        }
+        _0xLineChartObj.draw(dt, options);
     }
 
     function _0x7a8b(){
@@ -446,29 +516,37 @@
                 h+=`<div class="g_card"><div id="c_${uid}"></div><div id="t_${uid}" style="font-weight:700; color:var(--a); font-size:12px; margin-top:8px; padding:4px 8px; border-radius:6px; transition:0.3s; text-align:center; min-width:100px;">${g4.n}</div></div>`
             })});
             
+            let pauseBtnStyle = _0xIsPaused ? 'background-color:#fef08a;color:#854d0e;border-color:#fde047;' : '';
+            let pauseBtnText = _0xIsPaused ? '▶ Tiếp tục' : '⏸ Dừng';
+
             h += `
-            <div class="g_title" style="grid-column: 1 / -1; margin-top: 30px;">5. BIỂU ĐỒ XU HƯỚNG (LINE CHART)</div>
-            <div style="grid-column: 1 / -1; background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div style="width: 300px; position: relative; z-index: 101;">
-                        <div class="dd-wrap">
-                            <div class="dd-head" onclick="document.getElementById('chart_opts').classList.toggle('show')">
-                                <span id="dd_label">Đã chọn 1 thông số</span>
+            <div id="chart_container_wrapper" style="grid-column: 1 / -1; background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--bo); box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-top: 30px; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; position: relative; z-index: 105;">
+                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <div style="color: var(--a); font-weight: 800; font-size: 14px; border-left: 5px solid var(--a); padding-left: 10px; text-transform: uppercase;">5. BIỂU ĐỒ XU HƯỚNG</div>
+                        <div class="dd-wrap" style="width: 220px;">
+                            <div class="dd-head" style="padding: 6px 12px; font-size: 11px; text-transform: none; border-color: var(--bo);" onclick="document.getElementById('chart_opts').classList.toggle('show')">
+                                <span id="dd_label" style="color: var(--t1);">Đã chọn ${_0xSelectedCharts.length} thông số</span>
                                 <span style="font-size: 10px;">▼</span>
                             </div>
-                            <div id="chart_opts" class="dd-list">
-                                <!-- Checkboxes -->
+                            <div id="chart_opts" class="dd-list" style="text-transform: none; font-weight: normal;">
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%;">
-                        <div id="acm_line_chart" style="width: 100%; height: 350px;"></div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="chart-btn" id="btn_pause_chart" onclick="togglePauseChart()" style="${pauseBtnStyle}">${pauseBtnText}</button>
+                        <button class="chart-btn" onclick="toggleFullscreenChart()">⛶ Toàn màn hình</button>
                     </div>
+                </div>
+                <div style="width: 100%; flex-grow: 1; min-height: 350px;">
+                    <div id="acm_line_chart" style="width: 100%; height: 100%; min-height: 350px;"></div>
                 </div>
             </div>`;
             
             g1.innerHTML=h;
             renderChartDropdown();
+            // Lần đầu render cần delay nhỏ để div xuất hiện, sau đó vẽ Line Chart
+            setTimeout(_0xDrawChart, 100);
         }
         
         _0xff0.forEach(g6=>{g6.l.forEach(g7=>{
@@ -499,8 +577,6 @@
 
             _0x1a2[uid].draw(dt,{width:150,height:150,redFrom:rFrom,redTo:g7.m,yellowFrom:yFrom,yellowTo:yTo,max:g7.m})
         })})
-        
-        _0xDrawChart();
     }
 
     function _0x8f2c(){
