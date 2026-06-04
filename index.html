@@ -324,7 +324,13 @@
     function _0x7c22(){
         _0xfe1=!_0xfe1;_0xae2=!1;_0xEnA=!1;_0xFL=!1;_0x91a2();
         if(_0xfe1){
-            document.getElementById('gauge_v').innerHTML="";_0x1a2={};
+            // Reset nội dung DOM và Biến ChartObj để fix lỗi biểu đồ trắng khi quay lại từ tab Bảng
+            document.getElementById('gauge_v').innerHTML="";
+            _0x1a2={};
+            if(_0xLineChartObj) {
+                try { _0xLineChartObj.clearChart(); } catch(e){}
+                _0xLineChartObj = null;
+            }
             _0x7a8b(); 
         }
     }
@@ -472,8 +478,8 @@
                     if(devID === 'AFAB1' || devID === 'AFAB2') v /= 10;
                     if(keyStr === 'air_p') v /= 1000;
 
-                    // Bộ lọc 30.000: Bất kỳ giá trị nào nhảy lên > 30,000 hoặc quá âm (< -1000) sẽ bị gạch bỏ và lấy giá trị cũ bù vào
-                    if (v > 30000 || v < -1000) {
+                    // Bộ lọc thông minh: Bất kỳ giá trị nào > 30,000 hoặc < 0 sẽ bị loại bỏ và bù bằng giá trị cũ
+                    if (v > 30000 || v < 0) {
                         v = lastValidValues[sel] !== undefined ? lastValidValues[sel] : 0;
                     } else {
                         lastValidValues[sel] = v;
@@ -499,7 +505,7 @@
             animation: { duration: 0 } 
         };
 
-        // Reuse chart object để chống rò rỉ RAM (Memory Leak) khi để treo lâu
+        // Khởi tạo mới LineChart object nếu nó chưa tồn tại (giúp chống rò rỉ RAM)
         if (!_0xLineChartObj) {
             _0xLineChartObj = new google.visualization.LineChart(chartDiv);
         }
@@ -545,7 +551,6 @@
             
             g1.innerHTML=h;
             renderChartDropdown();
-            // Lần đầu render cần delay nhỏ để div xuất hiện, sau đó vẽ Line Chart
             setTimeout(_0xDrawChart, 100);
         }
         
